@@ -1,0 +1,48 @@
+public with sharing class ETC_GetAccountsQueue extends ETC_GetAccountsController implements Queueable {
+	public Account[] queueAccountList;
+	public Contact[] queueContactList;
+	public Integer nextPage;
+	public Boolean isSinglePage;
+
+	public ETC_GetAccountsQueue(Integer page, Boolean single) {
+		this.sync(ETC_GetAccountsWs.getAccounts(page));
+		this.queueAccountList = this.accountList;
+		this.queueContactList = this.contactList;
+		this.nextPage = page + 1;
+		this.isSinglePage = single;
+		System.debug('===START_CUENTAS_EN_COLA===');
+		System.debug(this.queueAccountList);
+		System.debug('Next Page=' + this.nextPage);
+		System.debug('===END_CUENTAS_EN_COLA===');
+	}
+
+	public void execute(QueueableContext context) {
+		System.debug('Pagina=' + String.valueOf(this.nextPage - 1));
+		if (!this.queueAccountList.isEmpty()) {
+			Database.UpsertResult[] accountResults = Database.upsert(this.queueAccountList, Account.Fields.Cliente__c, false);
+			// Database.UpsertResult[] contactResults = Database.upsert(this.queueContactList, Contact.Fields.External_Id__c, false);
+
+			List<Integer> upAccountResults = ETC_Utility.showQueueResult(accountResults, 'Cuentas', this.nextPage - 1, false);
+			System.debug('Se procesaron: ' + upAccountResults[0] + ' Registros exitosos. Cuentas');
+			System.debug('Se procesaron: ' + upAccountResults[1] + ' Registros con errores. Cuentas');
+
+			// List<Integer> upContactResults = ETC_Utility.showQueueResult(contactResults, 'Contactos', this.nextPage - 1, false);
+			// System.debug('Se procesaron: ' + upContactResults[0] + ' Registros exitosos. Contactos');
+			// System.debug('Se procesaron: ' + upContactResults[1] + ' Registros con errores. Contactos');
+
+			if (!this.isSinglePage) {
+				ETC_GetAccountsQueue.queue(this.nextPage, false);
+			}
+		}
+	}
+
+	@future(callout=true)
+	public static void queue(Integer page, Boolean single) {
+		execute(page, single);
+	}
+
+	public static void execute(Integer page, Boolean single) {
+		ETC_GetAccountsQueue q = new ETC_GetAccountsQueue(page, single);
+		System.enqueueJob(q);
+	}
+}

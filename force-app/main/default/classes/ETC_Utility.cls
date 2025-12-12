@@ -17,7 +17,7 @@ public with sharing class ETC_Utility {
 		];
 	}
 
-	public static List<Integer> showQueueResult(Database.UpsertResult[] upsertResult, String objectName, Integer page) {
+	public static List<Integer> showQueueResult(Database.UpsertResult[] upsertResult, String objectName, Integer page, Boolean sendEmail) {
 		List<Integer> counter = new List<Integer>();
 		Integer successCount = 0;
 		Integer errorCount = 0;
@@ -46,17 +46,19 @@ public with sharing class ETC_Utility {
 		counter.add(successCount);
 		counter.add(errorCount);
 
-		// if (errorCount > 0) {
-		// 	Messaging.reserveSingleEmailCapacity(2);
-		// 	Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-		// 	String[] toAddresses = new List<String>{ 'geaglts@gmail.com' };
-		// 	mail.setToAddresses(toAddresses);
-		// 	mail.setReplyTo('miguel.angel@etcloudmx.com');
-		// 	mail.setSenderDisplayName('Salesforce Support');
-		// 	mail.setSubject('Queue Errors');
-		// 	mail.setPlainTextBody(body);
-		// 	Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{ mail });
-		// }
+        if (sendEmail) {
+            if (errorCount > 0) {
+                Messaging.reserveSingleEmailCapacity(2);
+                Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+                String[] toAddresses = new List<String>{ 'miguel.angel@etcloudmx.com' };
+                mail.setToAddresses(toAddresses);
+                mail.setReplyTo('miguel.angel@etcloudmx.com');
+                mail.setSenderDisplayName('Salesforce Support');
+                mail.setSubject('Queue Errors');
+                mail.setPlainTextBody(body);
+                Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{ mail });
+            }
+        }
 
 		return counter;
 	}
