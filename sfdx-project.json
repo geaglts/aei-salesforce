@@ -1,0 +1,12 @@
+{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true
+    }
+  ],
+  "name": "aei",
+  "namespace": "",
+  "sfdcLoginUrl": "login.salesforce.com",
+  "sourceApiVersion": "65.0"
+}
