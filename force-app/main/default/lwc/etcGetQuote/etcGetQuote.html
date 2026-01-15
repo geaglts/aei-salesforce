@@ -1,0 +1,110 @@
+<template>
+    <div if:true={loading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </div>
+    <main>
+        <section>
+            <form onsubmit={searchQuote} class="searchForm">
+                <input name="quoteId" type="text" placeholder="Código de cotización">
+                <button>Buscar</button>
+                <button class="red" type="button" onclick={clearView}>Limpiar</button>
+            </form>
+        </section>
+        <hr if:true={quoteData.data}>
+        <section if:true={quoteData.data} class="quoteDataContainer">
+            <div class="recordLinks">
+                <a if:true={opportunityUrl} href={opportunityUrl} target="_blank">Oportunidad</a>
+                <a if:true={quoteUrl} href={quoteUrl} target="_blank">Cotizacion</a>
+            </div>
+            <div class="quoteHeaderInfo">
+                <strong>{quoteData.data.MovID}</strong>
+                <button onclick={saveQuote} if:false={isUpdate}>Guardar cotización</button>
+            </div>
+            <div class="quoteDataInfo">
+                <div class="grid-col-2">
+                    <lightning-record-picker
+                        id="client-record"
+                        label="Cliente"
+                        placeholder="Cliente"
+                        object-api-name="Account"
+                        data-type="client"
+                        class="label-input"
+                        value={quoteData.data._sfAccount.Id}
+                    >
+                    </lightning-record-picker>
+                    <lightning-record-picker
+                        id="opportunity-record"
+                        label="Oportunidad"
+                        placeholder="Oportunidad"
+                        object-api-name="Opportunity"
+                        data-type="opportunity"
+                        class="label-input"
+                        value={quoteData.data._sfOpp.Id}
+                        onchange={onChangeOpportunity}
+                    >
+                    </lightning-record-picker>
+                </div>
+                <div class="grid-col-3">
+                    <p><span>Estatus:</span> {quoteData.data.Estatus}</p>
+                    <p><span>Concepto:</span> {quoteData.data.Concepto}</p>
+                    <p><span>Moneda:</span> {quoteData.data.Moneda}</p>
+                </div>
+                <div class="grid-col-3">
+                    <p><span>Forma de envio:</span> {quoteData.data.FormaEnvio}</p>
+                    <p><span>Zona impuesto:</span> {quoteData.data.ZonaImpuesto}</p>
+                    <p><span>Condición:</span> {quoteData.data.Condicion}</p>
+                </div>
+                <section>
+                    <h2>Productos de la cotización</h2>
+                    <div class="lineProductsContainer">
+                        <template for:each={quoteData.data.VentaDCta} for:item="lineItem">
+                            <div key={lineItem.Renglon} class="lineProductCard">
+                                <div class="sub-title">
+                                    <span>Articulo</span>
+                                    <p>{lineItem.Articulo}</p>
+                                </div>
+                                <div class="sub-title mt-1">
+                                    <span>Código de fabricante</span>
+                                    <p>{lineItem.ThoCodigoFabricante}</p>
+                                </div>
+                                <div class="grid-col-2 mt-1">
+                                    <div class="sub-title">
+                                        <span>Cantidad</span>
+                                        <p>{lineItem.Cantidad} {lineItem.Unidad}</p>
+                                    </div>
+                                    <div class="sub-title">
+                                        <span>Precio</span>
+                                        <p>{lineItem.Precio}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+                <section>
+                    <h2>Pedidos</h2>
+                    <div class="lineProductsContainer">
+                        <template for:each={quoteData.data.DestinoCta} for:item="lineItem">
+                            <div key={lineItem.Id} class="lineProductCard">
+                                <div class="grid-col-2">
+                                    <div class="sub-title">
+                                        <span>Tipo</span>
+                                        <p>{lineItem.Mov}</p>
+                                    </div>
+                                    <div class="sub-title">
+                                        <span>Folio</span>
+                                        <p>{lineItem.MovID}</p>
+                                    </div>
+                                </div>
+                                <div class="sub-title">
+                                    <span>Fecha de emisión</span>
+                                    <p>{lineItem.FechaEmision}</p>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+</template>

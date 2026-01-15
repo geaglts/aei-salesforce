@@ -20,15 +20,15 @@ public with sharing class ETC_GetAccountsQueue extends ETC_GetAccountsController
 		System.debug('Pagina=' + String.valueOf(this.nextPage - 1));
 		if (!this.queueAccountList.isEmpty()) {
 			Database.UpsertResult[] accountResults = Database.upsert(this.queueAccountList, Account.Fields.Cliente__c, false);
-			// Database.UpsertResult[] contactResults = Database.upsert(this.queueContactList, Contact.Fields.External_Id__c, false);
+			Database.UpsertResult[] contactResults = Database.upsert(this.queueContactList, Contact.Fields.Id_Contacto__c, false);
 
 			List<Integer> upAccountResults = ETC_Utility.showQueueResult(accountResults, 'Cuentas', this.nextPage - 1, false);
 			System.debug('Se procesaron: ' + upAccountResults[0] + ' Registros exitosos. Cuentas');
 			System.debug('Se procesaron: ' + upAccountResults[1] + ' Registros con errores. Cuentas');
 
-			// List<Integer> upContactResults = ETC_Utility.showQueueResult(contactResults, 'Contactos', this.nextPage - 1, false);
-			// System.debug('Se procesaron: ' + upContactResults[0] + ' Registros exitosos. Contactos');
-			// System.debug('Se procesaron: ' + upContactResults[1] + ' Registros con errores. Contactos');
+			List<Integer> upContactResults = ETC_Utility.showQueueResult(contactResults, 'Contactos', this.nextPage - 1, false);
+			System.debug('Se procesaron: ' + upContactResults[0] + ' Registros exitosos. Contactos');
+			System.debug('Se procesaron: ' + upContactResults[1] + ' Registros con errores. Contactos');
 
 			if (!this.isSinglePage) {
 				ETC_GetAccountsQueue.queue(this.nextPage, false);

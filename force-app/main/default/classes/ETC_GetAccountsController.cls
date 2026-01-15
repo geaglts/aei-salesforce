@@ -41,29 +41,25 @@ public virtual with sharing class ETC_GetAccountsController {
         // newAccount.Owner.Agente__c = client.Agente;
         
 		accountList.add(newAccount);
-		// buildSObjectContact(client.codigo, client.personasContacto);
+		buildSObjectContact(client.Cliente, client.contactos);
 	}
 
-	// public void buildSObjectContact(String accountId, ETC_ResponseGetAccountsModel.PersonasContacto[] contacts) {
-	// 	Account accountRef = new Account(C_digo__c = accountId);
-	// 	if (contacts != null) {
-	// 		for (ETC_ResponseGetAccountsModel.PersonasContacto contact : contacts) {
-	// 			Contact newContact = new Contact();
-	// 			// System.debug(accountId + '_' + contact.id);
-	// 			newContact.External_Id__c = accountId + '_' + contact.id; // external
-	// 			newContact.MobilePhone = contact.movil;
-	// 			List<String> emails = ETC_Utility.getValidEmails(contact.correo);
-	// 			if (emails.size() > 0) {
-	// 				newContact.Email = emails[0];
-	// 			}
-	// 			newContact.LastName = contact.nombre;
-	// 			newContact.Title = contact.posicion;
-	// 			newContact.Contacto_Principal__c = contact.principal == 'Y';
-	// 			newContact.Phone = contact.telefono1;
-	// 			newContact.OtherPhone = contact.telefono2;
-	// 			newContact.Account = accountRef;
-	// 			contactList.add(newContact);
-	// 		}
-	// 	}
-	// }
+	public void buildSObjectContact(String accountId, List<ETC_ResponseGetAccountsModel.Contactos> contacts) {
+		Account accountRef = new Account(Cliente__c = accountId);
+		if (contacts != null) {
+			for (ETC_ResponseGetAccountsModel.Contactos contact : contacts) {
+				Contact newContact = new Contact();
+				if (contact.Nombre != null && contact.Nombre != '') {
+					newContact.LastName = contact.Nombre;
+				} else if (contact.eMail != null && contact.eMail != '') {
+					newContact.LastName = contact.eMail;
+				} else {
+					newContact.LastName = String.valueOf(contact.ID);
+				}
+				newContact.Id_Contacto__c = String.valueOf(contact.ID);
+				newContact.Account = accountRef;
+				contactList.add(newContact);
+			}
+		}
+	}
 }

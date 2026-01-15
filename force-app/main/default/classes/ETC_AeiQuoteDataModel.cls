@@ -1,61 +1,56 @@
-public class ETC_AeiQuoteModel {
+public with sharing class ETC_AeiQuoteDataModel {
     @AuraEnabled
-    public Data data;
-
-    public class Data {
-        @AuraEnabled
-        public Integer ID; // 224745
-        @AuraEnabled
-        public Integer Sucursal; // 0
-        @AuraEnabled
-        public String Cliente; // "289"
-        @AuraEnabled
-        public String Mov; // "Cotizacion"
-        @AuraEnabled
-        public String MovID; // "MID34400"
-        @AuraEnabled
-        public String FechaEmision; // "2025-11-21T00:00:00.000Z"
-        @AuraEnabled
-        public String FechaOriginal;
-        @AuraEnabled
-        public String Concepto; // "Concurso"
-        @AuraEnabled
-        public String Referencia;
-        @AuraEnabled
-        public String Observaciones;
-        @AuraEnabled
-        public String Almacen; // "001MERIDA"
-        @AuraEnabled
-        public String Moneda; // "Pesos"
-        @AuraEnabled
-        public Integer TipoCambio; // 1
-        @AuraEnabled
-        public String Agente; // "JPAREJA"
-        @AuraEnabled
-        public String Usuario; // "JYAM"
-        @AuraEnabled
-        public String Estatus; // "CONCLUIDO"
-        @AuraEnabled
-        public String FormaEnvio; // "Flete Terrestre"
-        @AuraEnabled
-        public String Condicion; // "30Dias"
-        @AuraEnabled
-        public String ListaPreciosEsp; // "V.Gral Mid/Cun MXN"
-        @AuraEnabled
-        public String ZonaImpuesto; // "IVA 0 a 16"
-        @AuraEnabled
-        public List<SucursalCta> SucursalCta;
-        @AuraEnabled
-        public List<ClienteCta> ClienteCta;
-        @AuraEnabled
-        public List<DestinoCta> DestinoCta;
-        @AuraEnabled
-        public List<VentaDCta> VentaDCta;
-        @AuraEnabled
-        public String sfAccountId;
-        @AuraEnabled
-        public String sfOppId;
-    }
+    public Integer ID; // 224745
+    @AuraEnabled
+    public Integer Sucursal; // 0
+    @AuraEnabled
+    public String Cliente; // "289"
+    @AuraEnabled
+    public String Mov; // "Cotizacion"
+    @AuraEnabled
+    public String MovID; // "MID34400"
+    @AuraEnabled
+    public String FechaEmision; // "2025-11-21T00:00:00.000Z"
+    @AuraEnabled
+    public String FechaOriginal;
+    @AuraEnabled
+    public String Concepto; // "Concurso"
+    @AuraEnabled
+    public String Referencia;
+    @AuraEnabled
+    public String Observaciones;
+    @AuraEnabled
+    public String Almacen; // "001MERIDA"
+    @AuraEnabled
+    public String Moneda; // "Pesos"
+    @AuraEnabled
+    public Integer TipoCambio; // 1
+    @AuraEnabled
+    public String Agente; // "JPAREJA"
+    @AuraEnabled
+    public String Usuario; // "JYAM"
+    @AuraEnabled
+    public String Estatus; // "CONCLUIDO"
+    @AuraEnabled
+    public String FormaEnvio; // "Flete Terrestre"
+    @AuraEnabled
+    public String Condicion; // "30Dias"
+    @AuraEnabled
+    public String ListaPreciosEsp; // "V.Gral Mid/Cun MXN"
+    @AuraEnabled
+    public String ZonaImpuesto; // "IVA 0 a 16"
+    @AuraEnabled
+    public List<SucursalCta> SucursalCta;
+    @AuraEnabled
+    public List<ClienteCta> ClienteCta;
+    @AuraEnabled
+    public List<DestinoCta> DestinoCta;
+    @AuraEnabled
+    public List<VentaDCta> VentaDCta;
+    @AuraEnabled
+    public String sfAccountId;
+    @AuraEnabled
+    public String sfOppId;
 
     public class SucursalCta {
         @AuraEnabled
@@ -188,9 +183,5 @@ public class ETC_AeiQuoteModel {
         public String FechaRequerida; // "2025-11-21T00:00:00"
         @AuraEnabled
         public Boolean ThoDescAmpliada; // true
-    }
-
-    public static ETC_AeiQuoteModel parse(String jsonString) {
-        return (ETC_AeiQuoteModel) JSON.deserialize(jsonString, ETC_AeiQuoteModel.class);
     }
 }

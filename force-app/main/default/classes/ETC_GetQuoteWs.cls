@@ -21,14 +21,15 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
         return null;
     }
 
-    public static void getQuote(String quoteId) {
+    @AuraEnabled(cacheable=false)
+    public static ETC_AeiQuoteModel getQuote(String quoteId) {
         ETC_GetQuoteWs ws = new ETC_GetQuoteWs();
         String rawQuote = ws.callService(quoteId);
         if (rawQuote != null) {
             ETC_AeiQuoteModel quoteData = ETC_AeiQuoteModel.parse(rawQuote);
-            System.debug(quoteData.data);
+            return quoteData;
         } else {
-            System.debug('We can\'t get quote, please contact an admin');
+            return null;
         }
     }
 }

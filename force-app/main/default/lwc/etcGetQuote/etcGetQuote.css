@@ -1,0 +1,130 @@
+main {
+    padding: 1em;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 12pt;
+    color: black;
+}
+
+h2 {
+    text-align: center;
+    font-size: 14pt;
+    font-weight: bold;
+    border-bottom: 1px solid black;
+    padding-bottom: .5em
+}
+
+.grid-col-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1em;
+}
+
+.grid-col-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1em;
+    align-items: center;
+}
+
+.recordLinks {
+    display: flex;
+    gap: 8px;
+    a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 35px;
+        padding: 0 16px;
+        border-radius: 4px;
+        background-color: #ebebebaa;
+        color: #00A1E0;
+        text-decoration: underline;
+
+        &:hover {
+            background-color: #00A1E0;
+            color: white;
+        }
+    }
+}
+
+.quoteDataContainer {
+    margin-top: 1em;
+}
+
+.quoteHeaderInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.quoteDataInfo {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+.searchForm {
+    display: flex;
+    gap: .5em;
+}
+
+button {
+    border: none;
+    height: 35px;
+    padding: 0 1em;
+    border-radius: 4px;
+    transition: all 350ms ease-in-out;
+}
+
+button:hover {
+    transition: all 250ms ease-in-out;
+    background-color: #00A1E0;
+    color: white;
+}
+
+button.red:hover {
+    background-color: red;
+    color: white;
+}
+
+input {
+    border: none;
+    border-radius: 4px;
+    border: 1px dashed gray;
+    padding: 0 .5em;
+    width: 25%;
+}
+
+p {
+    color: black;
+    span {
+        font-weight: bold;
+    }
+}
+
+.sub-title {
+    line-height: 1.1;
+    span {
+        font-weight: bold;
+        font-size: 10pt;
+        color: #00A1E0;
+    }
+}
+
+.lineProductsContainer {
+    padding: 8px 0;
+    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.lineProductCard {
+    border: 1px dashed black;
+    padding: .4em;
+    border-radius: 4px;
+}
+
+.mt-1 {
+    margin-top: 4px;
+}
