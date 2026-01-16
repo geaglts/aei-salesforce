@@ -69,6 +69,8 @@ public with sharing class ETC_SyncQuoteController {
         } catch (Exception e) {
             System.debug('New Opp Exception');
             System.debug(e);
+            recordLinks.put('error', e.getMessage().split('first error: ')[1]);
+            return recordLinks;
         }
         
         Quote newQuote = new Quote();
@@ -135,9 +137,13 @@ public with sharing class ETC_SyncQuoteController {
             }
             upsert newOrders Id_de_Movimiento__c;
             upsert newOrderLineItems External_Id__c;
+
+            recordLinks.put('createdOrders', JSON.serialize(newOrders));
         } catch (Exception e) {
             System.debug('New Quote Exception');
             System.debug(e);
+            recordLinks.put('error', e.getMessage().split('first error: ')[1]);
+            return recordLinks;
         }
 
         System.debug(recordLinks);

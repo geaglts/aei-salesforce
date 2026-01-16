@@ -11,6 +11,7 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
 
         Callout callout = createCallout(ENDPOINT_NAME, '/' + quoteId);
         callout.request.setHeader('Authorization', 'Bearer ' + token);
+
         HttpResponse rawQuote = sendCallout(callout);
 
         if (rawQuote.getStatusCode() == 200 || Test.isRunningTest()) {
