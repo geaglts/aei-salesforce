@@ -24,7 +24,7 @@ public with sharing class ETC_AeiQuoteDataModel {
     @AuraEnabled
     public String Moneda; // "Pesos"
     @AuraEnabled
-    public Integer TipoCambio; // 1
+    public Double TipoCambio; // 1
     @AuraEnabled
     public String Agente; // "JPAREJA"
     @AuraEnabled
@@ -118,7 +118,7 @@ public with sharing class ETC_AeiQuoteDataModel {
         @AuraEnabled
         public String Moneda; // "Pesos"
         @AuraEnabled
-        public Integer TipoCambio; // 1
+        public Double TipoCambio; // 1
         @AuraEnabled
         public List<DetalleDtoCta> DetalleDtoCta;
     }

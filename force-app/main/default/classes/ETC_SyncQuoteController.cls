@@ -47,29 +47,8 @@ public with sharing class ETC_SyncQuoteController {
         Map<String, String> recordLinks = new Map<String, String>();
         ETC_AeiQuoteModel newQuoteData = ETC_AeiQuoteModel.parse(rawNewQuoteData);
 
-        Opportunity newOpp = new Opportunity();
-        try {
-            if (newQuoteData.data.sfOppId != null) {
-                newOpp.Id = newQuoteData.data.sfOppId;
-            } else {
-                newOpp.Name = newQuoteData.data.MovID;
-            }
-            newOpp.StageName = 'Qualification';
-            newOpp.CloseDate = Date.valueOf(newQuoteData.data.FechaEmision);
-            if (newQuoteData.data.sfOppId != null) {
-                update newOpp;
-            } else {
-                newOpp.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;
-                newOpp.AccountId = newQuoteData.data.sfAccountId;
-                newOpp.Pricebook2Id = standardPricebook;
-                insert newOpp;
-            }
-            recordLinks.put('opportunityUrl', ETC_SyncQuoteController.generateRecordLink(newOpp.Id));
-            recordLinks.put('opportunityCreatedId', newOpp.Id);
-        } catch (Exception e) {
-            System.debug('New Opp Exception');
-            System.debug(e);
-            recordLinks.put('error', e.getMessage().split('first error: ')[1]);
+        if (newQuoteData.data.sfOppId == null) {
+            recordLinks.put('error', 'Esta cotización no puede ser creada debido a que no existe una oportunidad, por favor, genere la oportunidad y asigne el código de la cotización correspondiente.');
             return recordLinks;
         }
         
@@ -78,8 +57,24 @@ public with sharing class ETC_SyncQuoteController {
             newQuote.Name = newQuoteData.data.MovID;
             newQuote.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;
             newQuote.Pricebook2Id = standardPricebook;
-            newQuote.OpportunityId = newOpp.id;
+            newQuote.OpportunityId = newQuoteData.data.sfOppId;
             upsert newQuote N_mero_de_cotizaci_n__c;
+
+            Opportunity newOpp = new Opportunity();
+            try {
+                newOpp.Id = newQuoteData.data.sfOppId;
+                newOpp.SyncedQuoteId = newQuote.Id;
+                newOpp.StageName = 'Qualification';
+                update newOpp;
+                recordLinks.put('opportunityUrl', ETC_SyncQuoteController.generateRecordLink(newOpp.Id));
+                recordLinks.put('opportunityCreatedId', newOpp.Id);
+            } catch (Exception e) {
+                System.debug('New Opp Exception');
+                System.debug(e);
+                recordLinks.put('error', e.getMessage().split('first error: ')[1]);
+                return recordLinks;
+            }
+
             recordLinks.put('quoteUrl', ETC_SyncQuoteController.generateRecordLink(newQuote.Id));
             List<QuoteLineItem> newQuoteLineItems = new List<QuoteLineItem>();
             for (ETC_AeiQuoteModel.VentaDCta quoteItem: newQuoteData.data.VentaDCta) {

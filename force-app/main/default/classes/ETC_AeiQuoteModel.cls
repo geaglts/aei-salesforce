@@ -28,7 +28,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String Moneda; // "Pesos"
         @AuraEnabled
-        public Integer TipoCambio; // 1
+        public Double TipoCambio; // 1
         @AuraEnabled
         public String Agente; // "JPAREJA"
         @AuraEnabled
@@ -123,7 +123,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String Moneda; // "Pesos"
         @AuraEnabled
-        public Integer TipoCambio; // 1
+        public Double TipoCambio; // 1
         @AuraEnabled
         public List<DetalleDtoCta> DetalleDtoCta;
     }
