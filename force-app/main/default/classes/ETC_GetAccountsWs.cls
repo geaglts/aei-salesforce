@@ -26,7 +26,7 @@ public with sharing class ETC_GetAccountsWs extends ETC_Callout {
 
     public static ETC_ResponseGetAccountsModel getAccounts (Integer page) {
         ETC_GetAccountsWs ws = new ETC_GetAccountsWs();
-        String rawResponse = ws.callService('?page=' + page + '&limit=500');
+        String rawResponse = ws.callService('?page=' + page + '&limit=1000');
         return ETC_ResponseGetAccountsModel.parse(rawResponse);
     }
 }

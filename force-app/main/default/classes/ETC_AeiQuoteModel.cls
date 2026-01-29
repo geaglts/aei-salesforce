@@ -148,7 +148,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public Double Precio; // 1.1937
         @AuraEnabled
-        public Integer DescuentoImporte; // 0
+        public Double DescuentoImporte; // 0
         @AuraEnabled
         public Integer Impuesto1; // 16
         @AuraEnabled
@@ -177,7 +177,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public Double Precio; // 1.1937
         @AuraEnabled
-        public Integer DescuentoImporte; // 0
+        public Double DescuentoImporte; // 0
         @AuraEnabled
         public Integer Impuesto1; // 16
         @AuraEnabled

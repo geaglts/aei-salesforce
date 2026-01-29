@@ -37,6 +37,7 @@ public virtual with sharing class ETC_ControllerGetProduct {
         newProduct.Moneda_Precio__c = product.MonedaPrecio;
         newProduct.Margen_M_nimo__c = product.MargenMinimo;
         newProduct.Estatus__c = product.Estatus;
+        newProduct.IsActive = true;
         newProduct.Tipo_Compra__c = product.TipoCompra;
         newProduct.Tiene_Movimientos__c = product.TieneMovimientos;
         newProduct.Ruta_Distribuci_n__c = product.RutaDistribucion;

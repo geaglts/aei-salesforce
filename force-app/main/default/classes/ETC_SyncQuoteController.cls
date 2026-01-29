@@ -1,4 +1,9 @@
 public with sharing class ETC_SyncQuoteController {
+    public static Map<String, String> currencyByTag = new Map<String, String>{
+        'Dolares' => 'USD',
+        'Euros' => 'EUR',
+        'Pesos' => 'MXN'};
+    
     @AuraEnabled(cacheable=false)
     public static Account getAccount(String externalId) {
         List<Account> accounts = [SELECT Id, Name, Cliente__c FROM Account WHERE Cliente__c = :externalId];
@@ -51,19 +56,12 @@ public with sharing class ETC_SyncQuoteController {
             recordLinks.put('error', 'Esta cotización no puede ser creada debido a que no existe una oportunidad, por favor, genere la oportunidad y asigne el código de la cotización correspondiente.');
             return recordLinks;
         }
-        
-        Quote newQuote = new Quote();
-        try {
-            newQuote.Name = newQuoteData.data.MovID;
-            newQuote.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;
-            newQuote.Pricebook2Id = standardPricebook;
-            newQuote.OpportunityId = newQuoteData.data.sfOppId;
-            upsert newQuote N_mero_de_cotizaci_n__c;
 
+        
             Opportunity newOpp = new Opportunity();
             try {
                 newOpp.Id = newQuoteData.data.sfOppId;
-                newOpp.SyncedQuoteId = newQuote.Id;
+                newOpp.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
                 newOpp.StageName = 'Qualification';
                 update newOpp;
                 recordLinks.put('opportunityUrl', ETC_SyncQuoteController.generateRecordLink(newOpp.Id));
@@ -74,19 +72,32 @@ public with sharing class ETC_SyncQuoteController {
                 recordLinks.put('error', e.getMessage().split('first error: ')[1]);
                 return recordLinks;
             }
+        
+        Quote newQuote = new Quote();
+        try {
+            newQuote.Name = newQuoteData.data.MovID;
+            newQuote.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
+            newQuote.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;
+            newQuote.Pricebook2Id = standardPricebook;
+            newQuote.OpportunityId = newQuoteData.data.sfOppId;
+            newQuote.debug__c = rawNewQuoteData;
+            upsert newQuote N_mero_de_cotizaci_n__c;
+
+            newOpp.SyncedQuoteId = newQuote.Id;
+            update newOpp;
 
             recordLinks.put('quoteUrl', ETC_SyncQuoteController.generateRecordLink(newQuote.Id));
             List<QuoteLineItem> newQuoteLineItems = new List<QuoteLineItem>();
             for (ETC_AeiQuoteModel.VentaDCta quoteItem: newQuoteData.data.VentaDCta) {
                 Product2 productRef = new Product2(External_Id__c=quoteItem.Articulo);
-                PricebookEntry pbEntryRef = new PricebookEntry(External_Id__c='mxn_' + quoteItem.Articulo);
+                PricebookEntry pbEntryRef = new PricebookEntry(External_Id__c=currencyByTag.get(newQuoteData.data.Moneda).toLowerCase() + '_' + quoteItem.Articulo);
                 QuoteLineItem newQuoteItem = new QuoteLineItem();
                 newQuoteItem.QuoteId = newQuote.Id;
                 newQuoteItem.Quantity = quoteItem.Cantidad;
                 newQuoteItem.UnitPrice = quoteItem.Precio;
                 newQuoteItem.Product2 = productRef;
                 newQuoteItem.PricebookEntry = pbEntryRef;
-                newQuoteItem.External_Id__c = newQuote.N_mero_de_cotizaci_n__c + '_' + quoteItem.Articulo;
+                newQuoteItem.External_Id__c = newQuoteData.data.MovID + '_' + quoteItem.Renglon;
                 newQuoteLineitems.add(newQuoteItem);
             }
             upsert newQuoteLineItems External_Id__c;
@@ -100,6 +111,7 @@ public with sharing class ETC_SyncQuoteController {
             for (ETC_AeiQuoteModel.DestinoCta orderItem : newQuoteData.data.DestinoCta) {
                 Order newOrderRecord = new Order();
                 newOrderRecord.Name = orderItem.MovID;
+                newOrderRecord.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
                 newOrderRecord.QuoteId = newQuote.Id;
                 newOrderRecord.Id_de_Movimiento__c = orderItem.MovID;
                 newOrderRecord.AccountId = newQuoteData.data.sfAccountId;
@@ -116,9 +128,9 @@ public with sharing class ETC_SyncQuoteController {
                 // create order items
                 for (ETC_AeiQuoteModel.DetalleDtoCta orderLine : orderItem.DetalleDtoCta) {
                     Order orderRef = new Order(Id_de_Movimiento__c = orderItem.MovID);
-                    QuoteLineItem quoteLineItemRef = new QuoteLineItem(External_Id__c=newQuote.N_mero_de_cotizaci_n__c + '_' + orderLine.Articulo);
+                    QuoteLineItem quoteLineItemRef = new QuoteLineItem(External_Id__c=newQuote.N_mero_de_cotizaci_n__c + '_' + orderLine.AplicaRenglon);
                     Product2 productRef = new Product2(External_Id__c=orderLine.Articulo);
-                    PricebookEntry pbEntryRef = new PricebookEntry(External_Id__c='mxn_' + orderLine.Articulo);
+                    PricebookEntry pbEntryRef = new PricebookEntry(External_Id__c=currencyByTag.get(newQuoteData.data.Moneda).toLowerCase() + '_' + orderLine.Articulo);
                     OrderItem newOrderLine = new OrderItem();
                     newOrderLine.Order = orderRef;
                     newOrderLine.Quantity = orderLine.Cantidad;
@@ -126,7 +138,7 @@ public with sharing class ETC_SyncQuoteController {
                     newOrderLine.Product2 = productRef;
                     newOrderLine.PricebookEntry = pbEntryRef;
                     newOrderLine.QuoteLineItem = quoteLineItemRef;
-                    newOrderLine.External_Id__c = newOrderRecord.Id_de_Movimiento__c + '_' + orderLine.Articulo;
+                    newOrderLine.External_Id__c = newOrderRecord.Id_de_Movimiento__c + '_' + orderLine.Articulo + '_' + orderLine.AplicaRenglon;
                     newOrderLineitems.add(newOrderLine);
                 }
             }

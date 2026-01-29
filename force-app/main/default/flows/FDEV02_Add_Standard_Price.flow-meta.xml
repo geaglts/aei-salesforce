@@ -21,6 +21,31 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>euroEntry</targetReference>
+            </connector>
+            <label>Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>productEurFound</name>
+        <label>productEurFound</label>
+        <locationX>176</locationX>
+        <locationY>1355</locationY>
+        <defaultConnector>
+            <targetReference>Copia_1_de_createUsdEntry</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not Found</defaultConnectorLabel>
+        <rules>
+            <name>Copia_2_de_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>euroEntry.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
             <label>Found</label>
         </rules>
     </decisions>
@@ -72,6 +97,50 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
+        <name>Copia_1_de_createUsdEntry</name>
+        <label>createEurEntry</label>
+        <locationX>308</locationX>
+        <locationY>1463</locationY>
+        <inputAssignments>
+            <field>CurrencyIsoCode</field>
+            <value>
+                <stringValue>EUR</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>External_Id__c</field>
+            <value>
+                <stringValue>eur_{!$Record.External_Id__c}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IsActive</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Pricebook2Id</field>
+            <value>
+                <elementReference>getStandardPricebook.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Product2Id</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>UnitPrice</field>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </inputAssignments>
+        <object>PricebookEntry</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>createPricebookEntry</name>
         <label>createPricebookEntry</label>
         <locationX>264</locationX>
@@ -83,6 +152,12 @@
             <field>CurrencyIsoCode</field>
             <value>
                 <stringValue>MXN</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>External_Id__c</field>
+            <value>
+                <stringValue>mxn_{!$Record.External_Id__c}</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -117,10 +192,19 @@
         <label>createUsdEntry</label>
         <locationX>264</locationX>
         <locationY>1055</locationY>
+        <connector>
+            <targetReference>euroEntry</targetReference>
+        </connector>
         <inputAssignments>
             <field>CurrencyIsoCode</field>
             <value>
                 <stringValue>USD</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>External_Id__c</field>
+            <value>
+                <stringValue>usd_{!$Record.External_Id__c}</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -179,6 +263,41 @@
             <operator>EqualTo</operator>
             <value>
                 <stringValue>USD</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>PricebookEntry</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>euroEntry</name>
+        <label>euroEntry</label>
+        <locationX>176</locationX>
+        <locationY>1247</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>productEurFound</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Pricebook2Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>getStandardPricebook.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Product2Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>CurrencyIsoCode</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>EUR</stringValue>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
