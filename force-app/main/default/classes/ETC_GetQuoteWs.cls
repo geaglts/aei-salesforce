@@ -33,4 +33,6 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
             return null;
         }
     }
+
+    // TODO Agregar un metodo invocable para poder consultar una cotización por su external Id
 }
