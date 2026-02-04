@@ -1,0 +1,5 @@
+✔ Guardar en el campo Movimiento_origen__c el pedido que tenga un origen @started(26-02-03 21:29) @done(26-02-03 21:36) @lasted(7m32s)
+✔ Guardas los pedidos con el nuevo tipo de registro @started(26-02-03 21:29) @done(26-02-03 21:36) @lasted(7m33s)
+☐ Realizar el mapeo de las cuentas con los campos faltantes @started(26-02-03 21:59)
+☐ Agregar un boton en la oportunidad para acualizar o traer la cotizacion
+☐ Agregar un boton en la cotizacion para actualizarla

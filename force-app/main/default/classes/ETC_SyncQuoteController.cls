@@ -105,6 +105,8 @@ public with sharing class ETC_SyncQuoteController {
             // create orders
             Id rejectedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_perdida').getRecordTypeId();
             Id orderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Pedido').getRecordTypeId();
+            Id orderAdjustmentRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Ajuste_de_pedido').getRecordTypeId();
+
 
             List<Order> newOrders = new List<Order>();
             List<OrderItem> newOrderLineItems = new List<OrderItem>();
@@ -116,11 +118,18 @@ public with sharing class ETC_SyncQuoteController {
                 newOrderRecord.Id_de_Movimiento__c = orderItem.MovID;
                 newOrderRecord.AccountId = newQuoteData.data.sfAccountId;
                 newOrderRecord.Status = 'Draft';
-                newOrderRecord.EffectiveDate = Date.valueOf(orderItem.FechaEmision);
+                if (orderItem.Mov == 'Ajuste Pedido' && orderItem.OrigenID != null) {
+                    newOrderRecord.Movimiento_origen__r = new Order(Id_de_Movimiento__c = orderItem.OrigenID);
+                }
+                if (orderItem.FechaEmision != null) {
+                    newOrderRecord.EffectiveDate = Date.valueOf(orderItem.FechaEmision);
+                }
                 newOrderRecord.OpportunityId = newOpp.id;
                 newOrderRecord.Pricebook2Id = standardPricebook;
                 if (orderItem.Mov == 'Cotizacion Perdida') {
                     newOrderRecord.RecordTypeId = rejectedOrderRecordType;
+                } else if (orderItem.Mov == 'Ajuste Pedido') {
+                    newOrderRecord.RecordTypeId = orderAdjustmentRecordType;
                 } else {
                     newOrderRecord.RecordTypeId = orderRecordType;
                 }

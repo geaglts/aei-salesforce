@@ -24,21 +24,23 @@ public virtual with sharing class ETC_GetAccountsController {
 		Account newAccount = new Account();
 		newAccount.Name = client.Nombre;
 		newAccount.Cliente__c = client.Cliente;
-        // newAccount.BillingStreet = client.Direccion;
-        // newAccount.N_mero_de_facturaci_n__c = client.DireccionNumero;
-        // newAccount.Delegaci_n_de_facturaci_n__c = client.Delegacion;
-        // newAccount.Colonia_de_facturaci_n__c = client.Colonia;
-        // newAccount.BillingCity = client.Poblacion;
-        // newAccount.BillingState = client.Estado;
-        // newAccount.BillingCountry = client.Pais;
-        // newAccount.BillingPostalCode = client.CodigoPostal;
-        // newAccount.RFC__c = client.RFC;
-        // newAccount.Condici_n__c = client.Condicion;
-        // newAccount.Estatus__c = client.Estatus;
-        // newAccount.Email__c = client.eMail1;
+        newAccount.BillingStreet = client.Direccion;
+        newAccount.N_mero_de_facturaci_n__c = client.DireccionNumero;
+        newAccount.Colonia_de_facturaci_n__c = client.Colonia;
+        newAccount.BillingCity = client.Delegacion;
+        newAccount.Poblacion_de_facturacion__c = client.Poblacion;
+        newAccount.BillingState = client.Estado;
+        newAccount.BillingCountry = client.Pais;
+        newAccount.BillingPostalCode = client.CodigoPostal;
+        newAccount.RFC__c = client.RFC;
+        newAccount.Email__c = client.eMail1;
+        // newAccount.ZonaImpuesto__c = client.ZonaImpuesto;
+        newAccount.Condici_n__c = client.Condicion;
+        newAccount.ListaPreciosEsp__c = client.ListaPreciosEsp;
+        newAccount.Estatus__c = client.Estatus;
 
         // user reference
-        // newAccount.Owner.Agente__c = client.Agente;
+        newAccount.Owner = new User(Agente__c = client.Agente);
         
 		accountList.add(newAccount);
 		buildSObjectContact(client.Cliente, client.contactos);
