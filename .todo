@@ -5,8 +5,8 @@ default owners:
     ✔ Implementar la forma de asignacion de agentes, en caso de que no exista uno se le ponga a un usuario por default @started(26-02-05 09:27) @done(26-02-05 10:07) @lasted(40m35s)
     ✔ Add logic to set default owner with metadata @started(26-02-05 10:28) @done(26-02-05 10:28) @lasted(18s)
 sync single quote:
-    ☐ Crear un metodo para obtener la cotizacion y guardarla en la oportunidad correspondiente
-    ☐ Agregar un boton en la oportunidad para acualizar o traer la cotizacion
+    ✔ Crear un metodo para obtener la cotizacion y guardarla en la oportunidad correspondiente @done(26-02-05 15:53)
+    ✔ Agregar un boton en la oportunidad para acualizar o traer la cotizacion @done(26-02-05 15:53)
     ☐ Agregar un boton en la cotizacion para actualizarla
 
 lwc sync quote:

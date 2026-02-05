@@ -186,7 +186,7 @@ public with sharing class ETC_SyncQuoteController {
             newOrderRecord.QuoteId = newQuote.Id;
             newOrderRecord.Id_de_Movimiento__c = orderItem.MovID;
             newOrderRecord.AccountId = newQuoteData.data.sfAccountId;
-            newOrderRecord.Status = 'Draft';
+            newOrderRecord.Status = orderItem.Estatus;
             if (orderItem.Mov == 'Ajuste Pedido' && orderItem.OrigenID != null) {
                 newOrderRecord.Movimiento_origen__r = new Order(Id_de_Movimiento__c = orderItem.OrigenID);
             }
