@@ -36,7 +36,9 @@ public with sharing class ETC_GetAccountsWs extends ETC_Callout {
 		String response = ws.callService('/' + clientCode);
         Map<String, Object> data = (Map<String, Object>)JSON.deserializeUntyped(response);
         ETC_ResponseGetAccountsModel.Data clientData = (ETC_ResponseGetAccountsModel.Data) JSON.deserialize(JSON.serialize(data.get('data')), ETC_ResponseGetAccountsModel.Data.class);
+        Map<String,String> userByAgentCode = ETC_Utility.getUserIdByAgentCode();
         ETC_GetAccountsController c = new ETC_GetAccountsController();
+        c.setUsersByAgent(userByAgentCode);
         c.buildSObject(new List<ETC_ResponseGetAccountsModel.Data> {clientData});
 
         Database.UpsertResult[] accountResults = Database.upsert(c.accountList, Account.Fields.Cliente__c, false);

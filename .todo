@@ -1,6 +1,7 @@
 ✔ Guardar en el campo Movimiento_origen__c el pedido que tenga un origen @started(26-02-03 21:29) @done(26-02-03 21:36) @lasted(7m32s)
 ✔ Guardas los pedidos con el nuevo tipo de registro @started(26-02-03 21:29) @done(26-02-04 20:32) @lasted(23h3m10s)
 ✔ Realizar el mapeo de las cuentas con los campos faltantes @started(26-02-03 21:59) @done(26-02-04 20:33) @lasted(22h34m2s)
+✔ Implementar la forma de asignacion de agentes, en caso de que no exista uno se le ponga a un usuario por default @started(26-02-05 09:27) @done(26-02-05 10:07) @lasted(40m35s)
 ☐ Crear un metodo para obtener la cotizacion y guardarla en la oportunidad correspondiente
 ☐ Agregar un boton en la oportunidad para acualizar o traer la cotizacion
 ☐ Agregar un boton en la cotizacion para actualizarla

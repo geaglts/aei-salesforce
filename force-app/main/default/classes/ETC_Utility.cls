@@ -38,7 +38,7 @@ public with sharing class ETC_Utility {
 					System.debug('error has occurred.' + err.getStatusCode() + ': ' + err.getMessage());
 					body += '\nerror has occurred.' + err.getStatusCode() + ': ' + err.getMessage();
 					System.debug('fields that affected this error: ' + err.getFields());
-					body += '\nfields that affected this error: ' + err.getFields();
+					body += '\nfields that affected this error: ' + err.getFields() 	;
 				}
 			}
 		}
@@ -137,5 +137,14 @@ public with sharing class ETC_Utility {
 		container.addMetadata(mmd);
 
 		Id jobId = Test.isRunningTest() ? '001000000000001AAA' : Metadata.Operations.enqueueDeployment(container, null);
+	}
+
+	public static Map<String, String> getUserIdByAgentCode() {
+		Map<String, String> userIdByAgentCode = new Map<String, String>(); 
+		User[] users = [SELECT Id, Agente__c FROM User WHERE Agente__c != NULL];
+		for (User userRecord : users) {
+			userIdByAgentCode.put(userRecord.Agente__c, userRecord.Id);
+		}
+		return userIdByAgentCode;
 	}
 }

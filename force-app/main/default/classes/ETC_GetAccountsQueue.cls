@@ -3,13 +3,22 @@ public with sharing class ETC_GetAccountsQueue extends ETC_GetAccountsController
 	public Contact[] queueContactList;
 	public Integer nextPage;
 	public Boolean isSinglePage;
+	public Map<String,String> usersByAgentCode;
 
-	public ETC_GetAccountsQueue(Integer page, Boolean single) {
+	public ETC_GetAccountsQueue(Integer page, Boolean single, Map<String,String> users) {
+		if (users == null || users.size() == 0) {
+			this.usersByAgentCode = ETC_Utility.getUserIdByAgentCode();
+		} else {
+			this.usersByAgentCode = users;
+		}
+
+		this.setUsersByAgent(this.usersByAgentCode);
 		this.sync(ETC_GetAccountsWs.getAccounts(page));
 		this.queueAccountList = this.accountList;
 		this.queueContactList = this.contactList;
 		this.nextPage = page + 1;
 		this.isSinglePage = single;
+		
 		System.debug('===START_CUENTAS_EN_COLA===');
 		System.debug(this.queueAccountList);
 		System.debug('Next Page=' + this.nextPage);
@@ -31,18 +40,18 @@ public with sharing class ETC_GetAccountsQueue extends ETC_GetAccountsController
 			System.debug('Se procesaron: ' + upContactResults[1] + ' Registros con errores. Contactos');
 
 			if (!this.isSinglePage) {
-				ETC_GetAccountsQueue.queue(this.nextPage, false);
+				ETC_GetAccountsQueue.queue(this.nextPage, false, this.usersByAgentCode);
 			}
 		}
 	}
 
 	@future(callout=true)
-	public static void queue(Integer page, Boolean single) {
-		execute(page, single);
+	public static void queue(Integer page, Boolean single, Map<String,String> users) {
+		execute(page, single, users);
 	}
 
-	public static void execute(Integer page, Boolean single) {
-		ETC_GetAccountsQueue q = new ETC_GetAccountsQueue(page, single);
+	public static void execute(Integer page, Boolean single, Map<String,String> users) {
+		ETC_GetAccountsQueue q = new ETC_GetAccountsQueue(page, single, users);
 		System.enqueueJob(q);
 	}
 }

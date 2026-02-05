@@ -1,10 +1,16 @@
 public virtual with sharing class ETC_GetAccountsController {
 	public Account[] accountList;
 	public Contact[] contactList;
+	public Map<String,String> usersByAgentCode;
 
 	public ETC_GetAccountsController() {
 		accountList = new List<Account>();
 		contactList = new List<Contact>();
+		usersByAgentCode = new Map<String,String>();
+	}
+
+	public void setUsersByAgent(Map<String,String> users) {
+		this.usersByAgentCode = users;
 	}
 
 	public void sync(ETC_ResponseGetAccountsModel serviceResponse) {
@@ -43,7 +49,11 @@ public virtual with sharing class ETC_GetAccountsController {
         newAccount.Agente__c = client.Agente;
 
         // user reference
-        // newAccount.Owner = new User(Agente__c = client.Agente);
+		if (this.usersByAgentCode.containsKey(client.Agente)) {
+			newAccount.OwnerId = this.usersByAgentCode.get(client.Agente);
+		} else {
+			newAccount.OwnerId = this.usersByAgentCode.get('RPALOMO');
+		}
         
 		accountList.add(newAccount);
 		buildSObjectContact(client.Cliente, client.contactos);
