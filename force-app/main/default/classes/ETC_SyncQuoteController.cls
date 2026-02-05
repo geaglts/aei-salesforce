@@ -3,6 +3,9 @@ public with sharing class ETC_SyncQuoteController {
         'Dolares' => 'USD',
         'Euros' => 'EUR',
         'Pesos' => 'MXN'};
+    public static Id rejectedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_perdida').getRecordTypeId();
+    public static Id orderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Pedido').getRecordTypeId();
+    public static Id orderAdjustmentRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Ajuste_de_pedido').getRecordTypeId();
     
     @AuraEnabled(cacheable=false)
     public static Account getAccount(String externalId) {
@@ -103,56 +106,54 @@ public with sharing class ETC_SyncQuoteController {
             upsert newQuoteLineItems External_Id__c;
 
             // create orders
-            Id rejectedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_perdida').getRecordTypeId();
-            Id orderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Pedido').getRecordTypeId();
-            Id orderAdjustmentRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Ajuste_de_pedido').getRecordTypeId();
-
-
-            List<Order> newOrders = new List<Order>();
-            List<OrderItem> newOrderLineItems = new List<OrderItem>();
-            for (ETC_AeiQuoteModel.DestinoCta orderItem : newQuoteData.data.DestinoCta) {
-                Order newOrderRecord = new Order();
-                newOrderRecord.Name = orderItem.MovID;
-                newOrderRecord.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
-                newOrderRecord.QuoteId = newQuote.Id;
-                newOrderRecord.Id_de_Movimiento__c = orderItem.MovID;
-                newOrderRecord.AccountId = newQuoteData.data.sfAccountId;
-                newOrderRecord.Status = 'Draft';
-                if (orderItem.Mov == 'Ajuste Pedido' && orderItem.OrigenID != null) {
-                    newOrderRecord.Movimiento_origen__r = new Order(Id_de_Movimiento__c = orderItem.OrigenID);
-                }
-                if (orderItem.FechaEmision != null) {
-                    newOrderRecord.EffectiveDate = Date.valueOf(orderItem.FechaEmision);
-                }
-                newOrderRecord.OpportunityId = newOpp.id;
-                newOrderRecord.Pricebook2Id = standardPricebook;
-                if (orderItem.Mov == 'Cotizacion Perdida') {
-                    newOrderRecord.RecordTypeId = rejectedOrderRecordType;
-                } else if (orderItem.Mov == 'Ajuste Pedido') {
-                    newOrderRecord.RecordTypeId = orderAdjustmentRecordType;
-                } else {
-                    newOrderRecord.RecordTypeId = orderRecordType;
-                }
-                newOrders.add(newOrderRecord);
-                // create order items
-                for (ETC_AeiQuoteModel.DetalleDtoCta orderLine : orderItem.DetalleDtoCta) {
-                    Order orderRef = new Order(Id_de_Movimiento__c = orderItem.MovID);
-                    QuoteLineItem quoteLineItemRef = new QuoteLineItem(External_Id__c=newQuote.N_mero_de_cotizaci_n__c + '_' + orderLine.AplicaRenglon);
-                    Product2 productRef = new Product2(External_Id__c=orderLine.Articulo);
-                    PricebookEntry pbEntryRef = new PricebookEntry(External_Id__c=currencyByTag.get(newQuoteData.data.Moneda).toLowerCase() + '_' + orderLine.Articulo);
-                    OrderItem newOrderLine = new OrderItem();
-                    newOrderLine.Order = orderRef;
-                    newOrderLine.Quantity = orderLine.Cantidad;
-                    newOrderLine.UnitPrice = orderLine.Precio;
-                    newOrderLine.Product2 = productRef;
-                    newOrderLine.PricebookEntry = pbEntryRef;
-                    newOrderLine.QuoteLineItem = quoteLineItemRef;
-                    newOrderLine.External_Id__c = newOrderRecord.Id_de_Movimiento__c + '_' + orderLine.Articulo + '_' + orderLine.AplicaRenglon;
-                    newOrderLineitems.add(newOrderLine);
-                }
-            }
+            // List<Order> newOrders = new List<Order>();
+            // List<OrderItem> newOrderLineItems = new List<OrderItem>();
+            // for (ETC_AeiQuoteModel.DestinoCta orderItem : newQuoteData.data.DestinoCta) {
+            //     Order newOrderRecord = new Order();
+            //     newOrderRecord.Name = orderItem.MovID;
+            //     newOrderRecord.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
+            //     newOrderRecord.QuoteId = newQuote.Id;
+            //     newOrderRecord.Id_de_Movimiento__c = orderItem.MovID;
+            //     newOrderRecord.AccountId = newQuoteData.data.sfAccountId;
+            //     newOrderRecord.Status = 'Draft';
+            //     if (orderItem.Mov == 'Ajuste Pedido' && orderItem.OrigenID != null) {
+            //         newOrderRecord.Movimiento_origen__r = new Order(Id_de_Movimiento__c = orderItem.OrigenID);
+            //     }
+            //     if (orderItem.FechaEmision != null) {
+            //         newOrderRecord.EffectiveDate = Date.valueOf(orderItem.FechaEmision);
+            //     }
+            //     newOrderRecord.OpportunityId = newOpp.id;
+            //     newOrderRecord.Pricebook2Id = standardPricebook;
+            //     if (orderItem.Mov == 'Cotizacion Perdida') {
+            //         newOrderRecord.RecordTypeId = rejectedOrderRecordType;
+            //     } else if (orderItem.Mov == 'Ajuste Pedido') {
+            //         newOrderRecord.RecordTypeId = orderAdjustmentRecordType;
+            //     } else {
+            //         newOrderRecord.RecordTypeId = orderRecordType;
+            //     }
+            //     newOrders.add(newOrderRecord);
+            //     // create order items
+            //     for (ETC_AeiQuoteModel.DetalleDtoCta orderLine : orderItem.DetalleDtoCta) {
+            //         Order orderRef = new Order(Id_de_Movimiento__c = orderItem.MovID);
+            //         QuoteLineItem quoteLineItemRef = new QuoteLineItem(External_Id__c=newQuote.N_mero_de_cotizaci_n__c + '_' + orderLine.AplicaRenglon);
+            //         Product2 productRef = new Product2(External_Id__c=orderLine.Articulo);
+            //         PricebookEntry pbEntryRef = new PricebookEntry(External_Id__c=currencyByTag.get(newQuoteData.data.Moneda).toLowerCase() + '_' + orderLine.Articulo);
+            //         OrderItem newOrderLine = new OrderItem();
+            //         newOrderLine.Order = orderRef;
+            //         newOrderLine.Quantity = orderLine.Cantidad;
+            //         newOrderLine.UnitPrice = orderLine.Precio;
+            //         newOrderLine.Product2 = productRef;
+            //         newOrderLine.PricebookEntry = pbEntryRef;
+            //         newOrderLine.QuoteLineItem = quoteLineItemRef;
+            //         newOrderLine.External_Id__c = newOrderRecord.Id_de_Movimiento__c + '_' + orderLine.Articulo + '_' + orderLine.AplicaRenglon;
+            //         newOrderLineitems.add(newOrderLine);
+            //     }
+            // }
+            Map<String, List<Object>> ordersToCreate = generateOrderRecordsWithItems(newQuoteData, newQuoteData.data.DestinoCta, newQuote, newOpp, standardPricebook, false);
+            List<Order> newOrders = (List<Order>) ordersToCreate.get('orders');
+            List<OrderItem> newOrderItems = (List<OrderItem>) ordersToCreate.get('orderItems');
             upsert newOrders Id_de_Movimiento__c;
-            upsert newOrderLineItems External_Id__c;
+            upsert newOrderItems External_Id__c;
 
             recordLinks.put('createdOrders', JSON.serialize(newOrders));
         } catch (Exception e) {
@@ -165,5 +166,80 @@ public with sharing class ETC_SyncQuoteController {
         System.debug(recordLinks);
 
         return recordLinks;
+    }
+
+    // Metodo para generar los pedidos de una cotizacion con base a un parametro de entrada
+    // Parametro de entrada: Lista de pedidos a generar
+    public static Map<String, List<Object>> generateOrderRecordsWithItems(ETC_AeiQuoteModel newQuoteData, ETC_AeiQuoteModel.DestinoCta[] ordersToCreate, Quote newQuote, Opportunity newOpp, String standardPricebook, Boolean isAdjustment) {
+        Map<String, List<Object>> outputRecords = new Map<String, List<Object>>();
+        
+        List<Order> newOrders = new List<Order>();
+        List<OrderItem> newOrderLineItems = new List<OrderItem>();
+        for (ETC_AeiQuoteModel.DestinoCta orderItem : ordersToCreate) {
+            System.debug('-------------------------');
+            System.debug(isAdjustment);
+            System.debug(orderItem);
+            System.debug('-------------------------');
+            Order newOrderRecord = new Order();
+            newOrderRecord.Name = orderItem.MovID;
+            newOrderRecord.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
+            newOrderRecord.QuoteId = newQuote.Id;
+            newOrderRecord.Id_de_Movimiento__c = orderItem.MovID;
+            newOrderRecord.AccountId = newQuoteData.data.sfAccountId;
+            newOrderRecord.Status = 'Draft';
+            if (orderItem.Mov == 'Ajuste Pedido' && orderItem.OrigenID != null) {
+                newOrderRecord.Movimiento_origen__r = new Order(Id_de_Movimiento__c = orderItem.OrigenID);
+            }
+            if (orderItem.FechaEmision != null) {
+                newOrderRecord.EffectiveDate = Date.valueOf(orderItem.FechaEmision);
+            }
+            newOrderRecord.OpportunityId = newOpp.id;
+            newOrderRecord.Pricebook2Id = standardPricebook;
+            if (orderItem.Mov == 'Cotizacion Perdida') {
+                newOrderRecord.RecordTypeId = rejectedOrderRecordType;
+            } else if (orderItem.Mov == 'Ajuste Pedido') {
+                newOrderRecord.RecordTypeId = orderAdjustmentRecordType;
+            } else {
+                newOrderRecord.RecordTypeId = orderRecordType;
+            }
+            newOrders.add(newOrderRecord);
+            // create order items
+            ETC_AeiQuoteModel.DetalleDtoCta[] orderItemsToSave;
+            if (isAdjustment) {
+                orderItemsToSave = orderItem.DestDetPedidoCte;
+            } else {
+                orderItemsToSave = orderItem.DetalleDtoCta;
+            }
+            for (ETC_AeiQuoteModel.DetalleDtoCta orderLine : orderItemsToSave) {
+                Order orderRef = new Order(Id_de_Movimiento__c = orderItem.MovID);
+                QuoteLineItem quoteLineItemRef = new QuoteLineItem(External_Id__c=newQuote.N_mero_de_cotizaci_n__c + '_' + orderLine.AplicaRenglon);
+                Product2 productRef = new Product2(External_Id__c=orderLine.Articulo);
+                PricebookEntry pbEntryRef = new PricebookEntry(External_Id__c=currencyByTag.get(newQuoteData.data.Moneda).toLowerCase() + '_' + orderLine.Articulo);
+                OrderItem newOrderLine = new OrderItem();
+                newOrderLine.Order = orderRef;
+                newOrderLine.Quantity = orderLine.Cantidad;
+                newOrderLine.UnitPrice = orderLine.Precio;
+                newOrderLine.Product2 = productRef;
+                newOrderLine.PricebookEntry = pbEntryRef;
+                newOrderLine.QuoteLineItem = quoteLineItemRef;
+                newOrderLine.External_Id__c = newOrderRecord.Id_de_Movimiento__c + '_' + orderLine.Articulo + '_' + orderLine.AplicaRenglon;
+                newOrderLineitems.add(newOrderLine);
+            }
+
+            if (orderItem.DestPedidoCte != null) {
+                Map<String, List<Object>> adjustmentOrders = generateOrderRecordsWithItems(newQuoteData, orderItem.DestPedidoCte, newQuote, newOpp, standardPricebook, true);
+                List<Order> adjustedOrders = (List<Order>) adjustmentOrders.get('orders');
+                List<OrderItem> adjustedOrderItems = (List<OrderItem>) adjustmentOrders.get('orderItems');
+                
+                newOrders.addAll(adjustedOrders);
+                newOrderLineItems.addAll(adjustedOrderItems);
+            }
+
+        }
+
+        outputRecords.put('orders', newOrders);
+        outputRecords.put('orderItems', newOrderLineItems);
+
+        return outputRecords;
     }
 }

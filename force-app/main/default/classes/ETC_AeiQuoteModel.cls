@@ -4,45 +4,49 @@ public class ETC_AeiQuoteModel {
 
     public class Data {
         @AuraEnabled
-        public Integer ID; // 224745
+        public Integer ID; // 993
         @AuraEnabled
-        public Integer Sucursal; // 0
+        public Integer Sucursal; // 2
         @AuraEnabled
-        public String Cliente; // "289"
+        public String Cliente; // "94"
         @AuraEnabled
         public String Mov; // "Cotizacion"
         @AuraEnabled
-        public String MovID; // "MID34400"
+        public String MovID; // "CAR13"
         @AuraEnabled
-        public String FechaEmision; // "2025-11-21T00:00:00.000Z"
+        public String FechaEmision; // "2022-05-03T00:00:00.000Z"
         @AuraEnabled
         public String FechaOriginal;
         @AuraEnabled
-        public String Concepto; // "Concurso"
+        public String Concepto; // "Compra"
         @AuraEnabled
-        public String Referencia;
+        public String Referencia; // "4000026518"
         @AuraEnabled
         public String Observaciones;
         @AuraEnabled
-        public String Almacen; // "001MERIDA"
+        public String Almacen; // "01CARMEN"
         @AuraEnabled
         public String Moneda; // "Pesos"
         @AuraEnabled
-        public Double TipoCambio; // 1
+        public Integer TipoCambio; // 1
         @AuraEnabled
-        public String Agente; // "JPAREJA"
+        public String Agente; // "HRODRIGUEZ"
         @AuraEnabled
-        public String Usuario; // "JYAM"
+        public String Usuario; // "MGUIZAR"
         @AuraEnabled
         public String Estatus; // "CONCLUIDO"
         @AuraEnabled
         public String FormaEnvio; // "Flete Terrestre"
         @AuraEnabled
-        public String Condicion; // "30Dias"
+        public String Condicion; // "60Dias"
         @AuraEnabled
-        public String ListaPreciosEsp; // "V.Gral Mid/Cun MXN"
+        public String ListaPreciosEsp; // "C.Gral Carmen MXN"
         @AuraEnabled
-        public String ZonaImpuesto; // "IVA 0 a 16"
+        public String ZonaImpuesto; // "IVA 16"
+        @AuraEnabled
+        public String sfOppId;
+        @AuraEnabled
+        public String sfAccountId;
         @AuraEnabled
         public List<SucursalCta> SucursalCta;
         @AuraEnabled
@@ -51,141 +55,137 @@ public class ETC_AeiQuoteModel {
         public List<DestinoCta> DestinoCta;
         @AuraEnabled
         public List<VentaDCta> VentaDCta;
-        @AuraEnabled
-        public String sfAccountId;
-        @AuraEnabled
-        public String sfOppId;
     }
 
     public class SucursalCta {
         @AuraEnabled
-        public Integer Sucursal; // 0
+        public Integer Sucursal; // 2
         @AuraEnabled
-        public String Nombre; // "MERIDA"
+        public String Nombre; // "CARMEN"
         @AuraEnabled
-        public String Prefijo; // "MID  "
+        public String Prefijo; // "CAR  "
         @AuraEnabled
-        public String Direccion; // "Calle 60 Diagonal por 59"
+        public String Direccion; // "Calle 20-A entre 47 y 49"
         @AuraEnabled
-        public String DireccionNumero; // "483A"
+        public String DireccionNumero; // "14"
         @AuraEnabled
-        public String Delegacion; // "Mérida"
+        public String Delegacion; // "Carmen"
         @AuraEnabled
-        public String Colonia; // "Ejido de Chuburna"
+        public String Colonia; // "Pallas"
         @AuraEnabled
-        public String Estado; // "Yucatán"
+        public String Poblacion; // "Ciudad del Carmen"
         @AuraEnabled
-        public String CodigoPostal; // "97300"
+        public String Estado; // "Campeche"
+        @AuraEnabled
+        public String CodigoPostal; // "24140"
         @AuraEnabled
         public String RFC; // "AEI861027P26"
     }
 
     public class ClienteCta {
         @AuraEnabled
-        public String Nombre; // "EDIFICTUN"
+        public String Nombre; // "CONSTRUCTORA SUBACUATICA DIAVAZ"
         @AuraEnabled
-        public String Direccion; // "CALLE 60"
+        public String Direccion; // "AV REVOLUCION PISO 3 DESPACHO B-2"
         @AuraEnabled
-        public String DireccionNumero; // "485"
+        public String DireccionNumero; // "468"
         @AuraEnabled
-        public String EntreCalles; // "N/A Y 60 DIAGONAL"
+        public String Delegacion; // "Benito Juárez"
         @AuraEnabled
-        public String Delegacion; // "Mérida"
+        public String Colonia; // "San Pedro de los Pinos"
         @AuraEnabled
-        public String Colonia; // "Parque Industrial Yucatán"
+        public String Poblacion; // "Ciudad de México"
         @AuraEnabled
-        public String Estado; // "Yucatán"
+        public String Estado; // "Ciudad de México"
         @AuraEnabled
-        public String CodigoPostal; // "97302"
+        public String CodigoPostal; // "03800"
         @AuraEnabled
-        public String RFC; // "EDI140303I97"
+        public String RFC; // "CSD840531F39"
         @AuraEnabled
-        public String eMail1; // ""
+        public String eMail1; // "facturacion_electronica@diavaz.com"
     }
 
     public class DestinoCta {
         @AuraEnabled
-        public Integer ID; // 224749
+        public Integer ID; // 995
         @AuraEnabled
         public String Mov; // "Pedido"
         @AuraEnabled
-        public String MovID; // "MID14803"
+        public String MovID; // "CAR92"
         @AuraEnabled
-        public String FechaEmision; // "2025-11-21T00:00:00"
+        public List<DestinoCta> DestPedidoCte;
+        @AuraEnabled
+        public String FechaEmision; // "2022-05-03T00:00:00"
         @AuraEnabled
         public String Origen; // "Cotizacion"
         @AuraEnabled
-        public String OrigenID; // "MID34400"
+        public String OrigenID; // "CAR13"
         @AuraEnabled
-        public String Agente; // "JPAREJA"
+        public String Agente; // "HRODRIGUEZ"
         @AuraEnabled
         public String Estatus; // "CONCLUIDO"
         @AuraEnabled
         public String Moneda; // "Pesos"
         @AuraEnabled
-        public Double TipoCambio; // 1
+        public Integer TipoCambio; // 1
         @AuraEnabled
         public List<DetalleDtoCta> DetalleDtoCta;
+        @AuraEnabled
+        public List<DetalleDtoCta> DestDetPedidoCte;
     }
 
     public class DetalleDtoCta {
         @AuraEnabled
         public String Aplica; // "Cotizacion"
         @AuraEnabled
-        public String AplicaID; // "MID34400"
+        public String AplicaID; // "CAR13"
         @AuraEnabled
         public Integer AplicaRenglon; // 2048
         @AuraEnabled
-        public String Articulo; // "EL-SOP0-0030"
+        public String Articulo; // "EL-AEC0-0041"
         @AuraEnabled
-        public String ClaveFabricante; // "UÑA-34"
+        public String ClaveFabricante; // "UR-3X12-AR"
         @AuraEnabled
-        public String DescArt; // "TEST DE DESCRIPCION"
+        public String Unidad; // "ML"
         @AuraEnabled
-        public String Unidad; // "PZ"
+        public Integer Cantidad; // 600
         @AuraEnabled
-        public Integer Cantidad; // 5
-        @AuraEnabled
-        public Double Precio; // 1.1937
-        @AuraEnabled
-        public Double DescuentoImporte; // 0
+        public Double Precio; // 43.59
         @AuraEnabled
         public Integer Impuesto1; // 16
         @AuraEnabled
-        public Double Costo; // 0.9586
+        public Double Costo; // 34.6255
         @AuraEnabled
         public String ContUso2; // "10"
         @AuraEnabled
-        public Double Importe; // 5.97
+        public Integer Importe; // 26154
     }
 
     public class VentaDCta {
         @AuraEnabled
         public Integer Renglon; // 2048
         @AuraEnabled
-        public String RenglonTipo; // "N"
+        public String RenglonTipo; // "L"
         @AuraEnabled
-        public String Articulo; // "EL-SOP0-0030"
+        public String Articulo; // "EL-AEC0-0041"
         @AuraEnabled
-        public String DescArt; // "TEST DE DESCRIPCION"
+        public String Unidad; // "ML"
         @AuraEnabled
-        public String Unidad; // "PZ"
+        public String ThoCodigoFabricante; // "UR-3X12-AR"
         @AuraEnabled
-        public String ThoCodigoFabricante; // "UÑA-34"
+        public Integer Cantidad; // 600
         @AuraEnabled
-        public Integer Cantidad; // 10
-        @AuraEnabled
-        public Double Precio; // 1.1937
-        @AuraEnabled
-        public Double DescuentoImporte; // 0
+        public Double Precio; // 43.59
         @AuraEnabled
         public Integer Impuesto1; // 16
         @AuraEnabled
-        public Double Costo; // 0.9586
+        public Double Costo; // 34.6255
+        @AuraEnabled
+        public String ContUso; // "03"
         @AuraEnabled
         public String ContUso2; // "10"
         @AuraEnabled
-        public String FechaRequerida; // "2025-11-21T00:00:00"
+        public String FechaRequerida; // "2022-05-03T00:00:00"
         @AuraEnabled
         public Boolean ThoDescAmpliada; // true
     }

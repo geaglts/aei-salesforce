@@ -9,11 +9,11 @@ import saveQuoteRecord from "@salesforce/apex/ETC_SyncQuoteController.saveQuoteR
 
 function logob(content) {
   console.log(
-    "==========================+++++++++++++++=========================="
+    "==========================+++++++++++++++==========================",
   );
   console.log("LOG:", JSON.stringify(content, null, 4));
   console.log(
-    "==========================+++++++++++++++=========================="
+    "==========================+++++++++++++++==========================",
   );
 }
 

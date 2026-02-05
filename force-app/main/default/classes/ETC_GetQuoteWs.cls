@@ -27,8 +27,13 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
         ETC_GetQuoteWs ws = new ETC_GetQuoteWs();
         String rawQuote = ws.callService(quoteId);
         if (rawQuote != null) {
-            ETC_AeiQuoteModel quoteData = ETC_AeiQuoteModel.parse(rawQuote);
-            return quoteData;
+            try {
+                ETC_AeiQuoteModel quoteData = ETC_AeiQuoteModel.parse(rawQuote);
+                return quoteData;
+            } catch (Exception e) {
+                System.debug(e);
+                return null;
+            }
         } else {
             return null;
         }
