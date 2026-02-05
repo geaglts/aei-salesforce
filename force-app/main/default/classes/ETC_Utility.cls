@@ -1,7 +1,7 @@
 public with sharing class ETC_Utility {
 	public static endpoint__mdt getEndpoint(String name) {
 		return [
-			SELECT method__c, endpoint__c, raw_response__c, env__c, timer__c
+			SELECT method__c, endpoint__c, raw_response__c, env__c, timer__c, default_owner__c
 			FROM endpoint__mdt
 			WHERE DeveloperName = :name
 			LIMIT 1

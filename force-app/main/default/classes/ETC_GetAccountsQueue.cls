@@ -12,6 +12,7 @@ public with sharing class ETC_GetAccountsQueue extends ETC_GetAccountsController
 			this.usersByAgentCode = users;
 		}
 
+		this.DEFAULT_OWNER = ETC_GetAccountsWs.defaultOwner();
 		this.setUsersByAgent(this.usersByAgentCode);
 		this.sync(ETC_GetAccountsWs.getAccounts(page));
 		this.queueAccountList = this.accountList;

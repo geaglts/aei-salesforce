@@ -22,7 +22,15 @@ public with sharing class ETC_GetAccountsWs extends ETC_Callout {
 
         return null;
     }
+
+    public String getDefaultOwner() {
+        return Test.isRunningTest() ? 'RPALOMO' : this.mdt.default_owner__c;
+    }
     
+    public static String defaultOwner() {
+        ETC_GetAccountsWs ws = new ETC_GetAccountsWs();
+        return Test.isRunningTest() ? 'RPALOMO' : ws.getDefaultOwner();  
+    }
 
     public static ETC_ResponseGetAccountsModel getAccounts (Integer page) {
         ETC_GetAccountsWs ws = new ETC_GetAccountsWs();

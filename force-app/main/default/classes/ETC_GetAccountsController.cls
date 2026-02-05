@@ -2,6 +2,7 @@ public virtual with sharing class ETC_GetAccountsController {
 	public Account[] accountList;
 	public Contact[] contactList;
 	public Map<String,String> usersByAgentCode;
+	public String DEFAULT_OWNER;
 
 	public ETC_GetAccountsController() {
 		accountList = new List<Account>();
@@ -52,7 +53,7 @@ public virtual with sharing class ETC_GetAccountsController {
 		if (this.usersByAgentCode.containsKey(client.Agente)) {
 			newAccount.OwnerId = this.usersByAgentCode.get(client.Agente);
 		} else {
-			newAccount.OwnerId = this.usersByAgentCode.get('RPALOMO');
+			newAccount.OwnerId = this.usersByAgentCode.get(DEFAULT_OWNER);
 		}
         
 		accountList.add(newAccount);
