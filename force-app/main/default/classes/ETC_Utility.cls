@@ -29,7 +29,7 @@ public with sharing class ETC_Utility {
 			if (sr.isSuccess()) {
 				successCount++;
 			} else {
-				System.debug('// ERROR - RECORD');
+				System.debug('// ERROR - RECORD: ' + objectName);
 				System.debug(sr);
 				body += '\n// ERROR - RECORD\n';
 				body += sr.getId();
