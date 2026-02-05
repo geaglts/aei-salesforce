@@ -105,6 +105,32 @@
                                 </div>
                             </div>
                         </template>
+                        <template for:each={quoteData.data.DestinoCta} for:item="lineItem">
+                            <template for:each={lineItem.DestPedidoCte} for:item="adjustmentLineItem">
+                                <div key={adjustmentLineItem.Id} class="lineProductCard">
+                                    <div class="grid-col-2">
+                                        <div class="sub-title">
+                                            <span>Tipo</span>
+                                            <p>{adjustmentLineItem.Mov}</p>
+                                        </div>
+                                        <div class="sub-title">
+                                            <span>Folio</span>
+                                            <p>{adjustmentLineItem.MovID}</p>
+                                        </div>
+                                    </div>
+                                    <div class="grid-col-2">
+                                        <div class="sub-title">
+                                            <span>Origen</span>
+                                            <p>{adjustmentLineItem.OrigenID}</p>
+                                        </div>
+                                        <div class="sub-title">
+                                            <span>Fecha de emisión</span>
+                                            <p>{adjustmentLineItem.FechaEmision}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
                     </div>
                 </section>
             </div>

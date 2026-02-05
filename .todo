@@ -4,3 +4,6 @@
 ☐ Crear un metodo para obtener la cotizacion y guardarla en la oportunidad correspondiente
 ☐ Agregar un boton en la oportunidad para acualizar o traer la cotizacion
 ☐ Agregar un boton en la cotizacion para actualizarla
+
+lwc sync quote:
+    ✔ Mostrar tambien los ajustes de pedido en la vista de pedidos @started(26-02-04 20:35) @done(26-02-04 20:50) @lasted(15m13s)
