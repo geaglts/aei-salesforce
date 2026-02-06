@@ -158,7 +158,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String ContUso2; // "10"
         @AuraEnabled
-        public Integer Importe; // 26154
+        public Double Importe; // 26154
     }
 
     public class VentaDCta {
