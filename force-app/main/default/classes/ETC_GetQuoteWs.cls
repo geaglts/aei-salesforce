@@ -69,6 +69,7 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
                     errorResult = true;
                     finalResponse += key.toUpperCase() + ': ' + syncQuoteResult.get(key) + '\n';
                 }
+                // finalResponse += key.toUpperCase() + ': ' + syncQuoteResult.get(key) + '\n';
             }
 
             if (!errorResult) {

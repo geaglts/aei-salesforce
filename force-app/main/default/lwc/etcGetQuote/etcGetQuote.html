@@ -16,7 +16,7 @@
                 <a if:true={opportunityUrl} href={opportunityUrl} target="_blank">Oportunidad</a>
                 <a if:true={quoteUrl} href={quoteUrl} target="_blank">Cotizacion</a>
                 <template for:each={createdOrders} for:item="order">
-                    <a key={order.Id} href={order.link} target="_blank">{order.Name}</a>
+                    <a key={order.Id} href={order.link} target="_blank">{order.Tipo_de_movimiento_bandera__c}: {order.Name}</a>
                 </template>
             </div>
             <div class="quoteHeaderInfo">
