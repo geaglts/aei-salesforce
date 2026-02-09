@@ -29,7 +29,11 @@ public virtual with sharing class ETC_GetAccountsController {
 
 	public void buildSObjectAccount(ETC_ResponseGetAccountsModel.Data client) {
 		Account newAccount = new Account();
-		newAccount.Name = client.Nombre;
+		if (String.isNotBlank(client.Nombre)) {
+			newAccount.Name = client.Nombre;
+		} else {
+			newAccount.Name = client.Cliente;
+		}
 		newAccount.Cliente__c = client.Cliente;
         newAccount.BillingStreet = client.Direccion;
         newAccount.N_mero_de_facturaci_n__c = client.DireccionNumero;
@@ -42,8 +46,18 @@ public virtual with sharing class ETC_GetAccountsController {
 			newAccount.BillingPostalCode = client.CodigoPostal;
 		}
         newAccount.RFC__c = client.RFC;
-        newAccount.Email__c = client.eMail1;
-        // newAccount.ZonaImpuesto__c = client.ZonaImpuesto;
+
+		if (String.isNotBlank(client.eMail1)) {
+			
+			String emailRegex = '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$';
+			if (Pattern.matches(emailRegex, client.eMail1)) {
+				newAccount.eMail__c = client.eMail1;
+			} else {
+				newAccount.eMail1_Texto__c = client.eMail1;
+			}
+		}
+		
+        newAccount.ZonaImpuesto__c = client.ZonaImpuesto;
         newAccount.Condici_n__c = client.Condicion;
         newAccount.ListaPreciosEsp__c = client.ListaPreciosEsp;
         newAccount.Estatus__c = client.Estatus;
