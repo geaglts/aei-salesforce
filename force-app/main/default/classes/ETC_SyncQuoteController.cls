@@ -82,6 +82,9 @@ public with sharing class ETC_SyncQuoteController {
             newQuote.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
             newQuote.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;
             newQuote.Pricebook2Id = standardPricebook;
+            if (newQuoteData.data.SucursalCta.size() > 0) {
+                newQuote.Sucursal__r = new Sucursal__c(External_Id__c = String.valueOf(newQuoteData.data.SucursalCta[0].Sucursal));
+            }
             newQuote.OpportunityId = newQuoteData.data.sfOppId;
             newQuote.debug__c = rawNewQuoteData;
             upsert newQuote N_mero_de_cotizaci_n__c;
