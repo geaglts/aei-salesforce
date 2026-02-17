@@ -28,7 +28,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String Moneda; // "Pesos"
         @AuraEnabled
-        public Integer TipoCambio; // 1
+        public Double TipoCambio; // 1
         @AuraEnabled
         public String Agente; // "HRODRIGUEZ"
         @AuraEnabled
@@ -55,6 +55,8 @@ public class ETC_AeiQuoteModel {
         public List<DestinoCta> DestinoCta;
         @AuraEnabled
         public List<VentaDCta> VentaDCta;
+        @AuraEnabled
+        public List<EtapaOportunidadDto> EtapaOportunidad;
     }
 
     public class SucursalCta {
@@ -127,7 +129,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String Moneda; // "Pesos"
         @AuraEnabled
-        public Integer TipoCambio; // 1
+        public Double TipoCambio; // 1
         @AuraEnabled
         public List<DetalleDtoCta> DetalleDtoCta;
         @AuraEnabled
@@ -188,6 +190,23 @@ public class ETC_AeiQuoteModel {
         public String FechaRequerida; // "2022-05-03T00:00:00"
         @AuraEnabled
         public Boolean ThoDescAmpliada; // true
+    }
+
+    public class EtapaOportunidadDto {
+        @AuraEnabled
+        public String Estatus;
+        @AuraEnabled
+        public Integer TotalLineas;
+        @AuraEnabled
+        public Integer LineasPendientes;
+        @AuraEnabled
+        public Integer LineasPedido;
+        @AuraEnabled
+        public Integer LineasPerdidas;
+        @AuraEnabled
+        public Integer LineasRechazadas;
+        @AuraEnabled
+        public String EtapaOportunidad;
     }
 
     public static ETC_AeiQuoteModel parse(String jsonString) {

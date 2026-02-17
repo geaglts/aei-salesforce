@@ -6,29 +6,33 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
     }
 
     @TestVisible
-    public String callService(String quoteId) {
+    public String callService(String queryParams) {
         String token = ETC_wsLogin.getToken();
 
-        Callout callout = createCallout(ENDPOINT_NAME, '/' + quoteId);
+        Callout callout = createCallout(ENDPOINT_NAME, queryParams);
         callout.request.setHeader('Authorization', 'Bearer ' + token);
 
         HttpResponse rawQuote = sendCallout(callout);
 
         if (rawQuote.getStatusCode() == 200 || Test.isRunningTest()) {
-            String serviceBody = Test.isRunningTest() ? this.mdt.raw_response__c : rawQuote.getBody();
+            String serviceBody = Test.isRunningTest() ? (queryParams.contains('page') ? this.mdt.list_raw_response__c : this.mdt.raw_response__c) : rawQuote.getBody();
             return serviceBody;
         }
 
         return null;
     }
 
+    // ETC_GetQuoteWs.getQuote('');
     @AuraEnabled(cacheable=false)
     public static ETC_AeiQuoteModel getQuote(String quoteId) {
         ETC_GetQuoteWs ws = new ETC_GetQuoteWs();
-        String rawQuote = ws.callService(quoteId);
+        String rawQuote = ws.callService('/' + quoteId);
         if (rawQuote != null) {
             try {
                 ETC_AeiQuoteModel quoteData = ETC_AeiQuoteModel.parse(rawQuote);
+                System.debug('==========================START_LOG_QUOTE_DATA==========================');
+                System.debug(JSON.serializePretty(quoteData));
+                System.debug('==========================END_LOG_QUOTE_DATA==========================');
                 return quoteData;
             } catch (Exception e) {
                 System.debug(e);
@@ -38,6 +42,26 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
             return null;
         }
     }
+
+    // ETC_GetQuoteWs.getByPage(1);
+    public static ETC_QuoteListResponseModel getByPage(Integer pageNumber) {
+        ETC_GetQuoteWs ws = new ETC_GetQuoteWs();
+        String rawQuote = ws.callService('?page='+ pageNumber +'&limit=50');
+        if (rawQuote != null) {
+            try {
+                ETC_QuoteListResponseModel quoteData = ETC_QuoteListResponseModel.parse(rawQuote);
+                system.debug('===========+++++++++++++++++++++++++++++===========');
+                system.debug('LOG: quoteData' +  quoteData);
+                system.debug('===========+++++++++++++++++++++++++++++===========');
+                return quoteData;
+            } catch (Exception e) {
+                System.debug(e);
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }   
 
     /* 
         TODO Agregar un metodo invocable para poder consultar una cotización por su external Id y guardar el registro
