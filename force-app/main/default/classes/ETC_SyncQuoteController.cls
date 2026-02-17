@@ -60,21 +60,26 @@ public with sharing class ETC_SyncQuoteController {
             return recordLinks;
         }
 
-        
-            Opportunity newOpp = new Opportunity();
-            try {
-                newOpp.Id = newQuoteData.data.sfOppId;
+        Opportunity newOpp = new Opportunity();
+        try {
+            if (String.isBlank(newQuoteData.data.sfOppId)) {
+                newOpp.Name = newQuoteData.data.MovID;
+                newOpp.CloseDate = Date.valueOf(newQuoteData.data.FechaEmision);
                 newOpp.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
-                newOpp.StageName = 'Qualification';
-                update newOpp;
-                recordLinks.put('opportunityUrl', ETC_SyncQuoteController.generateRecordLink(newOpp.Id));
-                recordLinks.put('opportunityCreatedId', newOpp.Id);
-            } catch (Exception e) {
-                System.debug('New Opp Exception');
-                System.debug(e);
-                recordLinks.put('error', e.getMessage().split('first error: ')[1]);
-                return recordLinks;
             }
+            newOpp.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;
+            if (newQuoteData.data.EtapaOportunidad.size() > 0) {
+                newOpp.StageName = newQuoteData.data.EtapaOportunidad[0].EtapaOportunidad;
+            }
+            upsert newOpp N_mero_de_cotizaci_n__c;
+            recordLinks.put('opportunityUrl', ETC_SyncQuoteController.generateRecordLink(newOpp.Id));
+            recordLinks.put('opportunityCreatedId', newOpp.Id);
+        } catch (Exception e) {
+            System.debug('New Opp Exception');
+            System.debug(e);
+            recordLinks.put('error', e.getMessage().split('first error: ')[1]);
+            return recordLinks;
+        }
         
         Quote newQuote = new Quote();
         try {

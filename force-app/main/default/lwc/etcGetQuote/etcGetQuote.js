@@ -52,7 +52,17 @@ export default class EtcGetQuote extends LightningElement {
         });
         return;
       }
-      const serviceQuoteData = await getQuote({ quoteId: data.quoteId });
+      let serviceQuoteData = await getQuote({ quoteId: data.quoteId });
+      console.log(serviceQuoteData);
+      serviceQuoteData = {
+        ...serviceQuoteData,
+        data: {
+          ...serviceQuoteData.data,
+          VentaDCta: serviceQuoteData.data.VentaDCta?.filter((v) =>
+            Boolean(v.Cantidad),
+          ),
+        },
+      };
       const sfQuote = await findQuoteByExternalId({ externalId: data.quoteId });
       this.quoteUrl = await generateRecordLink({ recordId: sfQuote?.Id });
       serviceQuoteData.data._sfAccount = await getAccount({
