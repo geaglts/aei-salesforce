@@ -46,6 +46,7 @@ public with sharing class ETC_GetAccountsWs extends ETC_Callout {
         ETC_ResponseGetAccountsModel.Data clientData = (ETC_ResponseGetAccountsModel.Data) JSON.deserialize(JSON.serialize(data.get('data')), ETC_ResponseGetAccountsModel.Data.class);
         Map<String,String> userByAgentCode = ETC_Utility.getUserIdByAgentCode();
         ETC_GetAccountsController c = new ETC_GetAccountsController();
+        c.DEFAULT_OWNER = defaultOwner();
         c.setUsersByAgent(userByAgentCode);
         c.buildSObject(new List<ETC_ResponseGetAccountsModel.Data> {clientData});
 

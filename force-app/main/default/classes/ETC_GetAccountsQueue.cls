@@ -6,13 +6,12 @@ public with sharing class ETC_GetAccountsQueue extends ETC_GetAccountsController
 	public Map<String,String> usersByAgentCode;
 
 	public ETC_GetAccountsQueue(Integer page, Boolean single, Map<String,String> users) {
+		this.DEFAULT_OWNER = ETC_GetAccountsWs.defaultOwner();
 		if (users == null || users.size() == 0) {
 			this.usersByAgentCode = ETC_Utility.getUserIdByAgentCode();
 		} else {
 			this.usersByAgentCode = users;
 		}
-
-		this.DEFAULT_OWNER = ETC_GetAccountsWs.defaultOwner();
 		this.setUsersByAgent(this.usersByAgentCode);
 		this.sync(ETC_GetAccountsWs.getAccounts(page));
 		this.queueAccountList = this.accountList;

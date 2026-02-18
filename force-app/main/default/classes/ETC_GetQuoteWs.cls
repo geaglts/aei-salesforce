@@ -77,8 +77,14 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
         try {
             // get opportunity record
             ETC_AeiQuoteModel wsQuote = ETC_GetQuoteWs.getQuote(requestList[0].quoteCode);
+            String accountId = '';
+            if (String.isBlank(requestList[0].accountId)) {
+                accountId = [SELECT Id FROM Account WHERE Cliente__c = : wsQuote.data.Cliente].Id;
+            } else {
+                accountId = requestList[0].accountId;
+            }
             // add additional quote params with opp data
-            wsQuote.data.sfAccountId = requestList[0].accountId;
+            wsQuote.data.sfAccountId = accountId;
             wsQuote.data.sfOppId = requestList[0].oppId;
             // try to sync and create the quoteRecord
             Map<String, String> syncQuoteResult = ETC_SyncQuoteController.saveQuoteRecord(JSON.serialize(wsQuote));         
@@ -120,7 +126,7 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
     public class Requests {
         @InvocableVariable(label='Opporunity Id' required=true)
         public String oppId;
-        @InvocableVariable(label='Account Id' required=true)
+        @InvocableVariable(label='Account Id' required=false)
         public String accountId;
         @InvocableVariable(label='Quote External Id' required=true)
         public String quoteCode;

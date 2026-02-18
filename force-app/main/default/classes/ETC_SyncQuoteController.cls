@@ -3,9 +3,10 @@ public with sharing class ETC_SyncQuoteController {
         'Dolares' => 'USD',
         'Euros' => 'EUR',
         'Pesos' => 'MXN'};
-    public static Id rejectedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_perdida').getRecordTypeId();
+    public static Id losedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_perdida').getRecordTypeId();
     public static Id orderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Pedido').getRecordTypeId();
     public static Id orderAdjustmentRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Ajuste_de_pedido').getRecordTypeId();
+    public static Id rejectedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_rechazada').getRecordTypeId();
     
     @AuraEnabled(cacheable=false)
     public static Account getAccount(String externalId) {
@@ -55,10 +56,10 @@ public with sharing class ETC_SyncQuoteController {
         Map<String, String> recordLinks = new Map<String, String>();
         ETC_AeiQuoteModel newQuoteData = ETC_AeiQuoteModel.parse(rawNewQuoteData);
 
-        if (newQuoteData.data.sfOppId == null) {
-            recordLinks.put('error', 'Esta cotización no puede ser creada debido a que no existe una oportunidad, por favor, genere la oportunidad y asigne el código de la cotización correspondiente.');
-            return recordLinks;
-        }
+        // if (newQuoteData.data.sfOppId == null) {
+        //     recordLinks.put('error', 'Esta cotización no puede ser creada debido a que no existe una oportunidad, por favor, genere la oportunidad y asigne el código de la cotización correspondiente.');
+        //     return recordLinks;
+        // }
 
         Opportunity newOpp = new Opportunity();
         try {
@@ -151,6 +152,9 @@ public with sharing class ETC_SyncQuoteController {
         List<Order> newOrders = new List<Order>();
         List<OrderItem> newOrderLineItems = new List<OrderItem>();
         for (ETC_AeiQuoteModel.DestinoCta orderItem : ordersToCreate) {
+            if (orderItem.Mov == 'Remision') {
+                break;
+            }
             System.debug('-------------------------');
             System.debug(isAdjustment);
             System.debug(orderItem);
@@ -163,7 +167,7 @@ public with sharing class ETC_SyncQuoteController {
             newOrderRecord.AccountId = newQuoteData.data.sfAccountId;
             newOrderRecord.Status = orderItem.Estatus;
             newOrderRecord.Tipo_de_movimiento_bandera__c = orderItem.Mov;
-            if (orderItem.Mov == 'Ajuste Pedido' && orderItem.OrigenID != null) {
+            if (orderItem.Origen == 'Pedido' && orderItem.OrigenID != null) {
                 newOrderRecord.Movimiento_origen__r = new Order(Id_de_Movimiento__c = orderItem.OrigenID);
             }
             if (orderItem.FechaEmision != null) {
@@ -172,9 +176,11 @@ public with sharing class ETC_SyncQuoteController {
             newOrderRecord.OpportunityId = newOpp.id;
             newOrderRecord.Pricebook2Id = standardPricebook;
             if (orderItem.Mov == 'Cotizacion Perdida') {
-                newOrderRecord.RecordTypeId = rejectedOrderRecordType;
+                newOrderRecord.RecordTypeId = losedOrderRecordType;
             } else if (orderItem.Mov == 'Ajuste Pedido') {
                 newOrderRecord.RecordTypeId = orderAdjustmentRecordType;
+            } else if (orderItem.Mov == 'Cotizacion Rechazada') {
+                newOrderRecord.RecordTypeId = rejectedOrderRecordType;
             } else {
                 newOrderRecord.RecordTypeId = orderRecordType;
             }

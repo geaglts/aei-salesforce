@@ -14,9 +14,10 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         'Dolares' => 'USD',
         'Euros' => 'EUR',
         'Pesos' => 'MXN'};
-    public static Id rejectedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_perdida').getRecordTypeId();
+    public static Id losedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_perdida').getRecordTypeId();
     public static Id orderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Pedido').getRecordTypeId();
     public static Id orderAdjustmentRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Ajuste_de_pedido').getRecordTypeId();
+    public static Id rejectedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_rechazada').getRecordTypeId();
     
     public ETC_ControllerGetQuotes() {
         this.quoteOpportunity = new List<Opportunity>();
@@ -89,6 +90,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         Opportunity newOpp = new Opportunity();
 
         newOpp.Name = quoteExternalId;
+        newOpp.Account = new Account(Cliente__c = quoteRecord.Cliente);
         if (String.isNotBlank(quoteRecord.FechaEmision)) {
             newOpp.CloseDate = Date.valueOf(quoteRecord.FechaEmision);
         }
@@ -113,6 +115,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         if (String.isBlank(String.valueOf(quoteItem.Cantidad)) || quoteItem.Cantidad == 0) {
             System.debug(quoteExternalId);
             System.debug(quoteItem.Cantidad);
+            return;
         } else {
             newQuoteItem.Quantity = quoteItem.Cantidad;
         }
@@ -152,6 +155,9 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         List<Order> newOrders = new List<Order>();
         List<OrderItem> newOrderLineItems = new List<OrderItem>();
         for (ETC_QuoteListResponseModel.DestinoCta orderItem : ordersToCreate) {
+            if (orderItem.Mov == 'Remision') {
+                break;
+            }
             // System.debug('-------------------------');
             // System.debug(isAdjustment);
             // System.debug(orderItem);
@@ -164,7 +170,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
             newOrderRecord.Account = new Account(Cliente__c = newQuoteData.Cliente);
             newOrderRecord.Status = orderItem.Estatus;
             newOrderRecord.Tipo_de_movimiento_bandera__c = orderItem.Mov;
-            if (orderItem.Mov == 'Ajuste Pedido' && orderItem.OrigenID != null) {
+            if (orderItem.Origen == 'Pedido' && orderItem.OrigenID != null) {
                 newOrderRecord.Movimiento_origen__r = new Order(Id_de_Movimiento__c = orderItem.OrigenID);
             }
             if (orderItem.FechaEmision != null) {
@@ -173,9 +179,11 @@ public virtual with sharing class ETC_ControllerGetQuotes {
             newOrderRecord.Opportunity = new Opportunity(N_mero_de_cotizaci_n__c = quoteExternalId);
             newOrderRecord.Pricebook2Id = standardPricebook;
             if (orderItem.Mov == 'Cotizacion Perdida') {
-                newOrderRecord.RecordTypeId = rejectedOrderRecordType;
+                newOrderRecord.RecordTypeId = losedOrderRecordType;
             } else if (orderItem.Mov == 'Ajuste Pedido') {
                 newOrderRecord.RecordTypeId = orderAdjustmentRecordType;
+            } else if (orderItem.Mov == 'Cotizacion Rechazada') {
+                newOrderRecord.RecordTypeId = rejectedOrderRecordType;
             } else {
                 newOrderRecord.RecordTypeId = orderRecordType;
             }

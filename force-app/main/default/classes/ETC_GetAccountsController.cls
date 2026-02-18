@@ -48,7 +48,6 @@ public virtual with sharing class ETC_GetAccountsController {
         newAccount.RFC__c = client.RFC;
 
 		if (String.isNotBlank(client.eMail1)) {
-			
 			String emailRegex = '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$';
 			if (Pattern.matches(emailRegex, client.eMail1)) {
 				newAccount.eMail__c = client.eMail1;
