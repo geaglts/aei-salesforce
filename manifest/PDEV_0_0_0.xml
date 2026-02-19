@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>FDEV02_Add_Standard_Price</members>
+        <name>Flow</name>
+    </types>
+    <types>
+        <members>endpoint__mdt</members>
+        <members>environment__mdt</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>endpoint.getAccounts</members>
+        <members>endpoint.getProducts</members>
+        <members>endpoint.getQuoteById</members>
+        <members>endpoint.login</members>
+        <members>environment.dev</members>
+        <name>CustomMetadata</name>
+    </types>
+    <types>
+        <members>AEI_SANDBOX</members>
+        <name>RemoteSiteSetting</name>
+    </types>
+    <version>64.0</version>
+</Package>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>dev</label>
+    <protected>false</protected>
+    <values>
+        <field>host__c</field>
+        <value xsi:type="xsd:string">https://apiaeisf.aei.mx</value>
+    </values>
+    <values>
+        <field>password__c</field>
+        <value xsi:type="xsd:string">Zf8!Pk2@Rw6#Lm9^Ht3$Sq1&amp;Nv5*Jy4</value>
+    </values>
+    <values>
+        <field>token__c</field>
+        <value xsi:type="xsd:string">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoidXNTYWxlc0ZvcmNlIiwicm9sZSI6InNhbGVzZm9yY2UiLCJpYXQiOjE3NzE1MjcxMjksImV4cCI6MTc3MTY5OTkyOX0.47LEv2VhMdCyZRzF5UBuld7PNP-SFQe0CnaWOh2QEg8</value>
+    </values>
+    <values>
+        <field>username__c</field>
+        <value xsi:type="xsd:string">usSalesForce</value>
+    </values>
+</CustomMetadata>

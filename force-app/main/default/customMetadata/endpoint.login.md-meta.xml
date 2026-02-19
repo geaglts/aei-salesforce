@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>login</label>
+    <protected>false</protected>
+    <values>
+        <field>default_owner__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>endpoint__c</field>
+        <value xsi:type="xsd:string">/api/v1/auth/login</value>
+    </values>
+    <values>
+        <field>env__c</field>
+        <value xsi:type="xsd:string">dev</value>
+    </values>
+    <values>
+        <field>list_raw_response__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>method__c</field>
+        <value xsi:type="xsd:string">POST</value>
+    </values>
+    <values>
+        <field>raw_response__c</field>
+        <value xsi:type="xsd:string">{
+  &quot;msj&quot;: &quot;Login exitoso&quot;,
+  &quot;token&quot;: &quot;e&quot;,
+  &quot;user&quot;: {
+    &quot;id&quot;: 2,
+    &quot;username&quot;: &quot;usSalesForce&quot;,
+    &quot;rol&quot;: &quot;salesforce&quot;
+  }
+}</value>
+    </values>
+    <values>
+        <field>timer__c</field>
+        <value xsi:type="xsd:double">30.0</value>
+    </values>
+</CustomMetadata>

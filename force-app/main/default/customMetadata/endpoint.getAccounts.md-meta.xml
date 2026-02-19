@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>getAccounts</label>
+    <protected>false</protected>
+    <values>
+        <field>default_owner__c</field>
+        <value xsi:type="xsd:string">RPALOMO</value>
+    </values>
+    <values>
+        <field>endpoint__c</field>
+        <value xsi:type="xsd:string">/api/v1/cte</value>
+    </values>
+    <values>
+        <field>env__c</field>
+        <value xsi:type="xsd:string">dev</value>
+    </values>
+    <values>
+        <field>list_raw_response__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>method__c</field>
+        <value xsi:type="xsd:string">GET</value>
+    </values>
+    <values>
+        <field>raw_response__c</field>
+        <value xsi:type="xsd:string">{ &quot;Cliente&quot;: &quot;1&quot;, &quot;Nombre&quot;: &quot;INMOBILIARIA PUERTO BONITO&quot;, &quot;Direccion&quot;: &quot;BOULEVARD PERIFERICO SUR EDIFICO A OFICINA A-302&quot;, &quot;DireccionNumero&quot;: &quot;3395&quot;, &quot;EntreCalles&quot;: &quot;LINEA UNO Y PERIFERICO SUR&quot;, &quot;Delegacion&quot;: &quot;Tlalpan&quot;, &quot;Colonia&quot;: &quot;Rincón del Pedregal&quot;, &quot;Poblacion&quot;: &quot;Ciudad de México&quot;, &quot;Estado&quot;: &quot;Ciudad de México&quot;, &quot;Pais&quot;: &quot;&quot;, &quot;CodigoPostal&quot;: &quot;14120&quot;, &quot;RFC&quot;: &quot;IPB861021MW9&quot;, &quot;eMail1&quot;: &quot;ipb861021mw9@b2b.mienlaceb2b.com&quot;, &quot;Credito&quot;: &quot;120 Dias-5,000,000&quot;, &quot;ZonaImpuesto&quot;: &quot;IVA 0 a 16&quot;, &quot;Agente&quot;: &quot;CCASTILLO&quot;, &quot;Condicion&quot;: &quot;120Dias&quot;, &quot;ListaPreciosEsp&quot;: &quot;V.Gral Mid/Cun MXN&quot;, &quot;Estatus&quot;: &quot;ALTA&quot;, &quot;contactos&quot;: [ { &quot;Cliente&quot;: &quot;1&quot;, &quot;ID&quot;: 1, &quot;Nombre&quot;: &quot;Principal&quot;, &quot;eMail&quot;: &quot;ipb861021mw9@b2b.mienlaceb2b.com&quot; } ]}</value>
+    </values>
+    <values>
+        <field>timer__c</field>
+        <value xsi:type="xsd:double">60.0</value>
+    </values>
+</CustomMetadata>

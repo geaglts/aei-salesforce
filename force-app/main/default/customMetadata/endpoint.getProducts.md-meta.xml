@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>getProducts</label>
+    <protected>false</protected>
+    <values>
+        <field>default_owner__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>endpoint__c</field>
+        <value xsi:type="xsd:string">/api/v1/art</value>
+    </values>
+    <values>
+        <field>env__c</field>
+        <value xsi:type="xsd:string">dev</value>
+    </values>
+    <values>
+        <field>list_raw_response__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>method__c</field>
+        <value xsi:type="xsd:string">GET</value>
+    </values>
+    <values>
+        <field>raw_response__c</field>
+        <value xsi:type="xsd:string">{ &quot;meta&quot;: { &quot;page&quot;: 1, &quot;limit&quot;: 2 }, &quot;data&quot;: [ { &quot;Articulo&quot;: &quot;-AC-CCH0-0487&quot;, &quot;Rama&quot;: &quot;IL0204&quot;, &quot;Descripcion1&quot;: &quot;Luminaria Serie Champ VMV LED 98W 120-240V montaje colgante con entrada de 3/4\&quot;, para aplicaciones industriales y en areas peligrosas, fabricado en aluminio libre de cobre con acabado en pintura epóxica, Cod. -VMVL-9-2A-UNV1, Mca.Eaton Crouse Hinds&quot;, &quot;Grupo&quot;: &quot;Normal&quot;, &quot;Categoria&quot;: &quot;Areas clasificadas&quot;, &quot;Familia&quot;: &quot;Iluminacion&quot;, &quot;Linea&quot;: &quot;Profesional&quot;, &quot;Fabricante&quot;: &quot;Cooper Crouse Hinds&quot;, &quot;ClaveFabricante&quot;: &quot;-VMVL-9-2A-UNV1&quot;, &quot;Impuesto1&quot;: 16, &quot;Unidad&quot;: &quot;PZ&quot;, &quot;TipoCosteo&quot;: &quot;Promedio&quot;, &quot;Peso&quot;: 10.6, &quot;Tipo&quot;: &quot;Normal&quot;, &quot;MonedaCosto&quot;: &quot;Pesos&quot;, &quot;MonedaPrecio&quot;: &quot;Pesos&quot;, &quot;MargenMinimo&quot;: 20, &quot;Estatus&quot;: &quot;ALTA&quot;, &quot;UltimoCambio&quot;: &quot;2023-08-07T12:20:29.000Z&quot;, &quot;Alta&quot;: &quot;2022-05-02T00:00:00.000Z&quot;, &quot;Usuario&quot;: &quot;JRIVAS&quot;, &quot;AlmacenROP&quot;: &quot;001MERIDA&quot;, &quot;RevisionUsuario&quot;: &quot;JRIVAS&quot;, &quot;TipoCompra&quot;: &quot;Centralizada&quot;, &quot;TieneMovimientos&quot;: true, &quot;RutaDistribucion&quot;: &quot;Matriz-Sucursales&quot;, &quot;Proveedor&quot;: &quot;232&quot;, &quot;ContUso2&quot;: &quot;12&quot;, &quot;artcosto&quot;: [ { &quot;Sucursal&quot;: 0, &quot;UltimoCosto&quot;: 741.75, &quot;CostoPromedio&quot;: 741.75 }, { &quot;Sucursal&quot;: 1, &quot;UltimoCosto&quot;: 36710.8625, &quot;CostoPromedio&quot;: 36426.72269736842 } ], &quot;artdisponible&quot;: [ { &quot;Almacen&quot;: &quot;001MERIDA &quot;, &quot;Existencias&quot;: 1, &quot;Apartado&quot;: 0, &quot;Disponible&quot;: 1 }, { &quot;Almacen&quot;: &quot;01PEMEX &quot;, &quot;Existencias&quot;: 0, &quot;Reservado&quot;: 0, &quot;Apartado&quot;: 0 }, { &quot;Almacen&quot;: &quot;NPAPEMEX &quot;, &quot;Existencias&quot;: 5, &quot;Apartado&quot;: 0, &quot;Disponible&quot;: 5 } ] }, { &quot;Articulo&quot;: &quot;-AC-CCH0-0527&quot;, &quot;Rama&quot;: &quot;IL0204&quot;, &quot;Descripcion1&quot;: &quot;Luminaria VMV Champ LED, construida de aluminio libre de cobre y lente de cristal, entrada de 1 1/2 a poste 25°, lámpara LED, IP66, 100-277V, 98W, 50/60 Hz, 3000K o 5600K, color negro y aluminio. Cod. -VMVL-9-J-UNV1, Mca. Crous Hinds&quot;, &quot;Grupo&quot;: &quot;Nuevo&quot;, &quot;Categoria&quot;: &quot;Areas clasificadas&quot;, &quot;Familia&quot;: &quot;Iluminacion&quot;, &quot;Linea&quot;: &quot;Profesional&quot;, &quot;Fabricante&quot;: &quot;Cooper Crouse Hinds&quot;, &quot;ClaveFabricante&quot;: &quot;-VMVL-9-J-UNV1&quot;, &quot;Impuesto1&quot;: 16, &quot;Unidad&quot;: &quot;PZ&quot;, &quot;TipoCosteo&quot;: &quot;Promedio&quot;, &quot;Peso&quot;: 9.934, &quot;Tipo&quot;: &quot;Normal&quot;, &quot;MonedaCosto&quot;: &quot;Pesos&quot;, &quot;MonedaPrecio&quot;: &quot;Pesos&quot;, &quot;MargenMinimo&quot;: 20, &quot;Estatus&quot;: &quot;ALTA&quot;, &quot;UltimoCambio&quot;: &quot;2023-08-07T12:22:34.000Z&quot;, &quot;Alta&quot;: &quot;2022-05-02T00:00:00.000Z&quot;, &quot;Usuario&quot;: &quot;JRIVAS&quot;, &quot;AlmacenROP&quot;: &quot;001MERIDA&quot;, &quot;RevisionUsuario&quot;: &quot;JRIVAS&quot;, &quot;TipoCompra&quot;: &quot;Centralizada&quot;, &quot;TieneMovimientos&quot;: true, &quot;RutaDistribucion&quot;: &quot;Matriz-Sucursales&quot;, &quot;Proveedor&quot;: &quot;232&quot;, &quot;ContUso2&quot;: &quot;12&quot;, &quot;artcosto&quot;: [ { &quot;Sucursal&quot;: 1, &quot;UltimoCosto&quot;: 37864.542, &quot;CostoPromedio&quot;: 37521.87707692307 } ], &quot;artdisponible&quot;: [ { &quot;Almacen&quot;: &quot;01PEMEX &quot;, &quot;Existencias&quot;: 0, &quot;Reservado&quot;: 0, &quot;Apartado&quot;: 0 }, { &quot;Almacen&quot;: &quot;NPAPEMEX &quot;, &quot;Existencias&quot;: 6, &quot;Apartado&quot;: 0, &quot;Disponible&quot;: 6 } ] } ]}</value>
+    </values>
+    <values>
+        <field>timer__c</field>
+        <value xsi:type="xsd:double">60.0</value>
+    </values>
+</CustomMetadata>
