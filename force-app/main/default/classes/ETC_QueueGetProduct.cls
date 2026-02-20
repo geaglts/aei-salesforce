@@ -1,3 +1,6 @@
+/*
+ETC_QueueGetProduct.queue(1, false);
+*/
 public with sharing class ETC_QueueGetProduct extends ETC_ControllerGetProduct implements Queueable {
     public List<Product2> queueProductList;
     public Integer nextPage;

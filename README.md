@@ -1,18 +1,58 @@
-# Salesforce DX Project: Next Steps
+The Salesforce VS Code Org Browser does not currently surface Quick Actions (“custom actions”) under object metadata. To work with them, use the CLI/Metadata API instead.
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+Practical paths:
 
-## How Do You Plan to Deploy Your Changes?
+- Retrieve all Quick Actions:
+  - package.xml:
+    - types
+      - members
+        - -
+      - name
+        - QuickAction
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+    - version
+      - Use your API version (e.g., 60.0)
 
-## Configure Your Salesforce DX Project
+  - Command:
+    - sf project retrieve start -m QuickAction
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+- Retrieve for a specific object (example for Account):
+  - sf project retrieve start -m QuickAction:Account.\*
 
-## Read All About It
+- Discover programmatically (Tooling API):
+  - SELECT Id, DeveloperName, Label, TargetObject, Type FROM QuickActionDefinition WHERE TargetObject = 'Account'
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+Notes:
+
+- Placement on layouts is part of Layout metadata, not in the QuickAction itself.
+- Managed-package actions may not be retrievable depending on package exposure.
+- Until Salesforce adds Org Browser support for QuickAction, use CLI/package.xml.
+
+In Org Browser, “Tabs” support is limited; if you don’t see them, use the CLI/Metadata API. Custom tabs are the “CustomTab” metadata type.
+
+Options:
+
+- Retrieve all custom tabs:
+  - sf project retrieve start -m CustomTab
+
+- Retrieve a specific tab by API name:
+  - sf project retrieve start -m CustomTab:My_Custom_Tab
+
+- Retrieve multiple specific tabs:
+  - sf project retrieve start -m CustomTab:My_Custom_Tab,Another_Tab
+
+What you’ll get:
+
+- Files under force-app/main/default/tabs/\*.tab-meta.xml for each custom tab.
+
+Discovery tips:
+
+- There isn’t a first-class CLI command to list tab component names; commonly you retrieve with -m CustomTab and inspect the generated names under force-app/main/default/tabs.
+- Tabs created by managed packages are retrievable only if exposed by the package.
+
+Related metadata:
+
+- App placements are in App metadata (LightningExperienceTheme/App/Menu) not in CustomTab itself.
+- If you also need custom object tabs, those are generated for objects but still represented as CustomTab metadata.
+
+Task complete.

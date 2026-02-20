@@ -1,3 +1,6 @@
+/*
+ETC_GetAccountsQueue.queue(1, false, null);
+*/
 public with sharing class ETC_GetAccountsQueue extends ETC_GetAccountsController implements Queueable {
 	public Account[] queueAccountList;
 	public Contact[] queueContactList;
