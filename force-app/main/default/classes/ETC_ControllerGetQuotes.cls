@@ -63,7 +63,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         }
         newQuote.Opportunity = new Opportunity(N_mero_de_cotizaci_n__c = quoteExternalId);
         newQuote.Status = quoteRecord.Estatus;
-        newQuote.debug__c = JSON.serialize(quoteRecord);
+        // newQuote.debug__c = JSON.serialize(quoteRecord);
         if (quoteRecord.etapaoportunidad != null && quoteRecord.etapaoportunidad.size() > 0) {
             newQuote.TotalLineas__c = quoteRecord.etapaoportunidad[0].TotalLineas;
             newQuote.LineasPendientes__c = quoteRecord.etapaoportunidad[0].LineasPendientes;
@@ -114,13 +114,17 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         QuoteLineItem newQuoteItem = new QuoteLineItem();
         newQuoteItem.Quote = new Quote(N_mero_de_cotizaci_n__c = quoteExternalId);
         if (String.isBlank(String.valueOf(quoteItem.Cantidad)) || quoteItem.Cantidad == 0) {
-            System.debug(quoteExternalId);
-            System.debug(quoteItem.Cantidad);
+            // System.debug(quoteExternalId);
+            // System.debug(quoteItem.Cantidad);
             return;
         } else {
             newQuoteItem.Quantity = quoteItem.Cantidad;
         }
-        newQuoteItem.UnitPrice = quoteItem.Precio;
+        if (quoteItem.Precio != null) {
+            newQuoteItem.UnitPrice = quoteItem.Precio;
+        } else {
+            newQuoteItem.UnitPrice = 0;
+        }
         newQuoteItem.Product2 = productRef;
         newQuoteItem.PricebookEntry = pbEntryRef;
         newQuoteItem.Renglon_Tipo__c = quoteItem.RenglonTipo;

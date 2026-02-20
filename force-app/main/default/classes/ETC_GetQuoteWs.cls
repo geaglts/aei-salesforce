@@ -46,7 +46,7 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
     // ETC_GetQuoteWs.getByPage(1);
     public static ETC_QuoteListResponseModel getByPage(Integer pageNumber) {
         ETC_GetQuoteWs ws = new ETC_GetQuoteWs();
-        String rawQuote = ws.callService('?page='+ pageNumber +'&limit=50');
+        String rawQuote = ws.callService('?page='+ pageNumber +'&limit=100');
         if (rawQuote != null) {
             try {
                 ETC_QuoteListResponseModel quoteData = ETC_QuoteListResponseModel.parse(rawQuote);

@@ -40,7 +40,7 @@ public class ETC_QuoteListResponseModel {
 
     public class DestinoCta {
         @AuraEnabled
-        public Integer ID; // 995
+        public Decimal ID; // 995
         @AuraEnabled
         public String Mov; // "Pedido"
         @AuraEnabled
@@ -73,7 +73,7 @@ public class ETC_QuoteListResponseModel {
         @AuraEnabled
         public String AplicaID; // "CAR13"
         @AuraEnabled
-        public Integer AplicaRenglon; // 2048
+        public Decimal AplicaRenglon; // 2048
         @AuraEnabled
         public String Articulo; // "EL-AEC0-0041"
         @AuraEnabled
@@ -81,11 +81,11 @@ public class ETC_QuoteListResponseModel {
         @AuraEnabled
         public String Unidad; // "ML"
         @AuraEnabled
-        public Integer Cantidad; // 600
+        public Decimal Cantidad; // 600
         @AuraEnabled
         public Double Precio; // 43.59
         @AuraEnabled
-        public Integer Impuesto1; // 16
+        public Decimal Impuesto1; // 16
         @AuraEnabled
         public Double Costo; // 34.6255
         @AuraEnabled
