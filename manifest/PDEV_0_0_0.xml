@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- THIS XML CONTAIN METADATA, NOT DEPENDEN FLOWS AND REMOTE SITE SETTINGS TO DEPLOY IN PRODUCTION -->
+    <!-- sf project deploy start -x .\manifest\PDEV_0_0_0.xml -o aei-production -->
     <types>
         <members>FDEV02_Add_Standard_Price</members>
         <name>Flow</name>

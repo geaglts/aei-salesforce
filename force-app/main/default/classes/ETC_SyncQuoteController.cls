@@ -67,11 +67,13 @@ public with sharing class ETC_SyncQuoteController {
                 newOpp.Name = newQuoteData.data.MovID;
                 newOpp.CloseDate = Date.valueOf(newQuoteData.data.FechaEmision);
                 newOpp.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
+                newOpp.Account = new Account(Cliente__c = newQuoteData.data.Cliente);
             }
             newOpp.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;
             if (newQuoteData.data.EtapaOportunidad.size() > 0) {
                 newOpp.StageName = newQuoteData.data.EtapaOportunidad[0].EtapaOportunidad;
             }
+            System.debug(newOpp);
             upsert newOpp N_mero_de_cotizaci_n__c;
             recordLinks.put('opportunityUrl', ETC_SyncQuoteController.generateRecordLink(newOpp.Id));
             recordLinks.put('opportunityCreatedId', newOpp.Id);
@@ -87,16 +89,17 @@ public with sharing class ETC_SyncQuoteController {
             newQuote.Name = newQuoteData.data.MovID;
             newQuote.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
             newQuote.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;
+            newQuote.Status = newQuoteData.data.Estatus;
             newQuote.Pricebook2Id = standardPricebook;
             if (newQuoteData.data.SucursalCta.size() > 0) {
                 newQuote.Sucursal__r = new Sucursal__c(External_Id__c = String.valueOf(newQuoteData.data.SucursalCta[0].Sucursal));
             }
-            newQuote.OpportunityId = newQuoteData.data.sfOppId;
+            newQuote.OpportunityId = newOpp.Id;
             newQuote.debug__c = rawNewQuoteData;
             upsert newQuote N_mero_de_cotizaci_n__c;
 
-            newOpp.SyncedQuoteId = newQuote.Id;
-            update newOpp;
+            // newOpp.SyncedQuoteId = newQuote.Id;
+            // update newOpp;
 
             recordLinks.put('quoteUrl', ETC_SyncQuoteController.generateRecordLink(newQuote.Id));
             List<QuoteLineItem> newQuoteLineItems = new List<QuoteLineItem>();
@@ -152,7 +155,7 @@ public with sharing class ETC_SyncQuoteController {
         List<Order> newOrders = new List<Order>();
         List<OrderItem> newOrderLineItems = new List<OrderItem>();
         for (ETC_AeiQuoteModel.DestinoCta orderItem : ordersToCreate) {
-            if (orderItem.Mov == 'Remision') {
+            if (orderItem.Mov == 'Remision' || String.isBlank(orderItem.MovID)) {
                 break;
             }
             System.debug('-------------------------');
@@ -164,7 +167,7 @@ public with sharing class ETC_SyncQuoteController {
             newOrderRecord.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
             newOrderRecord.QuoteId = newQuote.Id;
             newOrderRecord.Id_de_Movimiento__c = orderItem.MovID;
-            newOrderRecord.AccountId = newQuoteData.data.sfAccountId;
+            newOrderRecord.Account = new Account(Cliente__c = newQuoteData.data.Cliente);
             newOrderRecord.Status = orderItem.Estatus;
             newOrderRecord.Tipo_de_movimiento_bandera__c = orderItem.Mov;
             if (orderItem.Origen == 'Pedido' && orderItem.OrigenID != null) {
@@ -196,7 +199,9 @@ public with sharing class ETC_SyncQuoteController {
                 Order orderRef = new Order(Id_de_Movimiento__c = orderItem.MovID);
                 QuoteLineItem quoteLineItemRef = new QuoteLineItem(External_Id__c=newQuote.N_mero_de_cotizaci_n__c + '_' + orderLine.AplicaRenglon);
                 Product2 productRef = new Product2(External_Id__c=orderLine.Articulo);
+                System.debug(newOrderRecord.CurrencyIsoCode);
                 PricebookEntry pbEntryRef = new PricebookEntry(External_Id__c=currencyByTag.get(newQuoteData.data.Moneda).toLowerCase() + '_' + orderLine.Articulo);
+                System.debug(currencyByTag.get(newQuoteData.data.Moneda).toLowerCase() + '_' + orderLine.Articulo);
                 OrderItem newOrderLine = new OrderItem();
                 newOrderLine.Order = orderRef;
                 newOrderLine.Quantity = orderLine.Cantidad;

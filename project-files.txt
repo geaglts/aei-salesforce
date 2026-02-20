@@ -1,45 +1,49 @@
 ======= ApexClass =======
-ETC_AeiQuoteDataModel.cls
-ETC_AeiQuoteModel.cls
-ETC_Callout.cls
-ETC_ControllerGetProduct.cls
-ETC_ControllerGetQuotes.cls
-ETC_GetAccountsController.cls
-ETC_GetAccountsQueue.cls
-ETC_GetAccountsSchedule.cls
-ETC_GetAccountsWs.cls
-ETC_GetQuoteWs.cls
-ETC_ModelGetProducts.cls
-ETC_QueueGetProduct.cls
-ETC_QueueGetQuotes.cls
-ETC_QuoteListResponseModel.cls
-ETC_QuoteTest.cls
-ETC_ResponseGetAccountsModel.cls
-ETC_ScheduleGetProduct.cls
-ETC_SyncQuoteController.cls
-ETC_Utility.cls
-ETC_WsGetProducts.cls
-ETC_wsLogin.cls
-ETC_wsLoginSchedule.cls
+ETC_TestAccountsModule
+ETC_Callout
+ETC_Utility
+ETC_wsLoginSchedule
+ETC_wsLogin
+ETC_ResponseGetAccountsModel
+ETC_GetAccountsController
+ETC_GetAccountsQueue
+ETC_GetAccountsSchedule
+ETC_GetAccountsWs
 
-======= Flow =======
-FDEV02_Add_Standard_Price
+ETC_TestProductModule
+ETC_QueueGetProduct
+ETC_ControllerGetProduct
+ETC_ScheduleGetProduct
+ETC_WsGetProducts
+ETC_ModelGetProducts
+
+ETC_TestQuotesModule
+ETC_ControllerGetQuotes
+ETC_QueueGetQuotes
+ETC_QuoteListResponseModel
+ETC_ScheduleGetQuote
+ETC_GetQuoteWs
+ETC_AeiQuoteModel
+ETC_SyncQuoteController
+# ETC_AeiQuoteDataModel
+
 
 ======= LightningComponentBundle =======
-etcGetQuote.css
-etcGetQuote.html
-etcGetQuote.js
+etcGetQuote
 
-======= CustomObject =======
+======= CustomObject [DEPLOYED] =======
 endpoint__mdt
 environment__mdt
 
-======= CustomMetadata =======
+======= CustomMetadata [DEPLOYED] =======
 endpoint.getAccounts
 endpoint.getProducts
 endpoint.getQuoteById
 endpoint.login
 environment.dev
 
-======= RemoteSiteSetting =======
+======= RemoteSiteSetting [DEPLOYED] =======
 AEI_SANDBOX
+
+======= Flow [DEPLOYED] =======
+FDEV02_Add_Standard_Price

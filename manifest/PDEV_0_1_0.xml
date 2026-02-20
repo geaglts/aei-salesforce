@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- THIS XML CONTAIN ACCOUNT APEX CLASS TO DEPLOY IN PRODUCTION -->
+    <!-- sf project deploy start -x .\manifest\PDEV_0_1_0.xml -o aei-production -l RunSpecifiedTests -\-tests ETC_TestAccountsModule -->
+    <types>
+        <members>ETC_TestAccountsModule</members>
+        <members>ETC_Callout</members>
+        <members>ETC_Utility</members>
+        <members>ETC_wsLoginSchedule</members>
+        <members>ETC_wsLogin</members>
+        <members>ETC_ResponseGetAccountsModel</members>
+        <members>ETC_GetAccountsController</members>
+        <members>ETC_GetAccountsQueue</members>
+        <members>ETC_GetAccountsSchedule</members>
+        <members>ETC_GetAccountsWs</members>
+        <name>ApexClass</name>
+    </types>
+    <version>64.0</version>
+</Package>

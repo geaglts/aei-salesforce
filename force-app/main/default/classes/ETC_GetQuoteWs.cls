@@ -51,7 +51,7 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
             try {
                 ETC_QuoteListResponseModel quoteData = ETC_QuoteListResponseModel.parse(rawQuote);
                 system.debug('===========+++++++++++++++++++++++++++++===========');
-                system.debug('LOG: quoteData' +  quoteData);
+                system.debug('LOG: quoteData: ' +  quoteData);
                 system.debug('===========+++++++++++++++++++++++++++++===========');
                 return quoteData;
             } catch (Exception e) {

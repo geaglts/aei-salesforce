@@ -12,7 +12,7 @@
     </values>
     <values>
         <field>token__c</field>
-        <value xsi:type="xsd:string">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoidXNTYWxlc0ZvcmNlIiwicm9sZSI6InNhbGVzZm9yY2UiLCJpYXQiOjE3NzE1MjcxMjksImV4cCI6MTc3MTY5OTkyOX0.47LEv2VhMdCyZRzF5UBuld7PNP-SFQe0CnaWOh2QEg8</value>
+        <value xsi:type="xsd:string">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoidXNTYWxlc0ZvcmNlIiwicm9sZSI6InNhbGVzZm9yY2UiLCJpYXQiOjE3NzE1NDcwMTMsImV4cCI6MTc3MTcxOTgxM30.ICCP3YaLbRmEN1JfwUUlfiIzvHpxRu2z4gzrJ4Xb66E</value>
     </values>
     <values>
         <field>username__c</field>

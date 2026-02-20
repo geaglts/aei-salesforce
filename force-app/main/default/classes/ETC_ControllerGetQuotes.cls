@@ -62,6 +62,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
             newQuote.Sucursal__r = new Sucursal__c(External_Id__c = String.valueOf(quoteRecord.SucursalCta[0].Sucursal));
         }
         newQuote.Opportunity = new Opportunity(N_mero_de_cotizaci_n__c = quoteExternalId);
+        newQuote.Status = quoteRecord.Estatus;
         newQuote.debug__c = JSON.serialize(quoteRecord);
         if (quoteRecord.etapaoportunidad != null && quoteRecord.etapaoportunidad.size() > 0) {
             newQuote.TotalLineas__c = quoteRecord.etapaoportunidad[0].TotalLineas;
@@ -155,7 +156,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         List<Order> newOrders = new List<Order>();
         List<OrderItem> newOrderLineItems = new List<OrderItem>();
         for (ETC_QuoteListResponseModel.DestinoCta orderItem : ordersToCreate) {
-            if (orderItem.Mov == 'Remision') {
+            if (orderItem.Mov == 'Remision' || String.isBlank(orderItem.MovID)) {
                 break;
             }
             // System.debug('-------------------------');

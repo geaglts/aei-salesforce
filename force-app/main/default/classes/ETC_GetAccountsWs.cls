@@ -15,7 +15,7 @@ public with sharing class ETC_GetAccountsWs extends ETC_Callout {
         HttpResponse rawAccounts = sendCallout(callout);
 
         if (rawAccounts.getStatusCode() == 200 || Test.isRunningTest()) {
-            String serviceBody = Test.isRunningTest() ? this.mdt.raw_response__c : rawAccounts.getBody();
+            String serviceBody = Test.isRunningTest() ? (queries.contains('page') ?  this.mdt.list_raw_response__c : this.mdt.raw_response__c) : rawAccounts.getBody();
             System.debug(serviceBody);
             return serviceBody;
         }
@@ -29,7 +29,7 @@ public with sharing class ETC_GetAccountsWs extends ETC_Callout {
     
     public static String defaultOwner() {
         ETC_GetAccountsWs ws = new ETC_GetAccountsWs();
-        return Test.isRunningTest() ? 'RPALOMO' : ws.getDefaultOwner();  
+        return Test.isRunningTest() ? 'RPALOMO' : ws.getDefaultOwner();
     }
 
     public static ETC_ResponseGetAccountsModel getAccounts (Integer page) {

@@ -1,6 +1,6 @@
 public with sharing class ETC_GetAccountsSchedule implements Schedulable {
     public void execute(SchedulableContext sc) {
-		ETC_GetAccountsQueue.queue(1, false);
+		ETC_GetAccountsQueue.queue(1, false, null);
 		Id jobId = sc.getTriggerId();
 		System.abortJob(jobId);
 		// ejecuta el nuevo proceso en el tiempo especificado
