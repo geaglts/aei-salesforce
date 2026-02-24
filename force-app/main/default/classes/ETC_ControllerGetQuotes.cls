@@ -14,10 +14,6 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         'Dolares' => 'USD',
         'Euros' => 'EUR',
         'Pesos' => 'MXN'};
-    public static Id losedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_perdida').getRecordTypeId();
-    public static Id orderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Pedido').getRecordTypeId();
-    public static Id orderAdjustmentRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Ajuste_de_pedido').getRecordTypeId();
-    public static Id rejectedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_rechazada').getRecordTypeId();
     
     public ETC_ControllerGetQuotes() {
         this.quoteOpportunity = new List<Opportunity>();
@@ -183,14 +179,10 @@ public virtual with sharing class ETC_ControllerGetQuotes {
             }   
             newOrderRecord.Opportunity = new Opportunity(N_mero_de_cotizaci_n__c = quoteExternalId);
             newOrderRecord.Pricebook2Id = standardPricebook;
-            if (orderItem.Mov == 'Cotizacion Perdida') {
-                newOrderRecord.RecordTypeId = losedOrderRecordType;
-            } else if (orderItem.Mov == 'Ajuste Pedido') {
-                newOrderRecord.RecordTypeId = orderAdjustmentRecordType;
-            } else if (orderItem.Mov == 'Cotizacion Rechazada') {
-                newOrderRecord.RecordTypeId = rejectedOrderRecordType;
+            if (ETC_SyncQuoteController.recordTypeForOrder.containsKey(orderItem.Mov.toLowerCase())) {
+                newOrderRecord.RecordTypeId = ETC_SyncQuoteController.recordTypeForOrder.get(orderItem.Mov.toLowerCase());
             } else {
-                newOrderRecord.RecordTypeId = orderRecordType;
+                newOrderRecord.RecordTypeId = ETC_SyncQuoteController.recordTypeForOrder.get('default');
             }
             newOrders.add(newOrderRecord);
             // create order items

@@ -3,10 +3,15 @@ public with sharing class ETC_SyncQuoteController {
         'Dolares' => 'USD',
         'Euros' => 'EUR',
         'Pesos' => 'MXN'};
-    public static Id losedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_perdida').getRecordTypeId();
-    public static Id orderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Pedido').getRecordTypeId();
-    public static Id orderAdjustmentRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Ajuste_de_pedido').getRecordTypeId();
-    public static Id rejectedOrderRecordType = Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_rechazada').getRecordTypeId();
+
+    public static Map<String, Id> recordTypeForOrder = new Map<String, Id>{
+        'cotizacion perdida' => Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_perdida').getRecordTypeId(),
+        'ajuste pedido' => Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Ajuste_de_pedido').getRecordTypeId(),
+        'cotizacion rechazada' => Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_rechazada').getRecordTypeId(),
+        'default' => Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Pedido').getRecordTypeId(),
+        'venta perdida' => Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Venta_perdida').getRecordTypeId(),
+        'venta rechazada' => Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Venta_rechazada').getRecordTypeId()
+    };
     
     @AuraEnabled(cacheable=false)
     public static Account getAccount(String externalId) {
@@ -178,14 +183,10 @@ public with sharing class ETC_SyncQuoteController {
             }   
             newOrderRecord.OpportunityId = newOpp.id;
             newOrderRecord.Pricebook2Id = standardPricebook;
-            if (orderItem.Mov == 'Cotizacion Perdida') {
-                newOrderRecord.RecordTypeId = losedOrderRecordType;
-            } else if (orderItem.Mov == 'Ajuste Pedido') {
-                newOrderRecord.RecordTypeId = orderAdjustmentRecordType;
-            } else if (orderItem.Mov == 'Cotizacion Rechazada') {
-                newOrderRecord.RecordTypeId = rejectedOrderRecordType;
+            if (recordTypeForOrder.containsKey(orderItem.Mov.toLowerCase())) {
+                newOrderRecord.RecordTypeId = recordTypeForOrder.get(orderItem.Mov.toLowerCase());
             } else {
-                newOrderRecord.RecordTypeId = orderRecordType;
+                newOrderRecord.RecordTypeId = recordTypeForOrder.get('default');
             }
             newOrders.add(newOrderRecord);
             // create order items
