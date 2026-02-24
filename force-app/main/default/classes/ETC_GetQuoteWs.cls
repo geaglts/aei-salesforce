@@ -64,7 +64,6 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
     }   
 
     /* 
-        TODO Agregar un metodo invocable para poder consultar una cotización por su external Id y guardar el registro
         Obtenermos el id de la oportunidad que sera la que se estara vinculando a la cotización
         Obtenemos el extenalId (código de la cotización) para consultar el metodo getQuote que llama el ws
             En la respuesta del servicio guardamos en sfAccountId el cliente

@@ -1,7 +1,7 @@
 /*
 Pricebook2 standardPricebook = [SELECT Id FROM Pricebook2 WHERE isStandard = TRUE];
 // params(page, isSingle, standardPricebookId);
-ETC_QueueGetQuotes.queue(1, true, standardPricebook.Id);
+ETC_QueueGetQuotes.queue(1, true, standardPricebook.Id, null, null);
 // filter: QueueableHandler
 // filter: FutureHandler
 */
