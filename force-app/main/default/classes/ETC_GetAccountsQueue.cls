@@ -8,8 +8,12 @@ public with sharing class ETC_GetAccountsQueue extends ETC_GetAccountsController
 	public Boolean isSinglePage;
 	public Map<String,String> usersByAgentCode;
 
-	public ETC_GetAccountsQueue(Integer page, Boolean single, Map<String,String> users) {
-		this.DEFAULT_OWNER = ETC_GetAccountsWs.defaultOwner();
+	public ETC_GetAccountsQueue(Integer page, Boolean single, Map<String,String> users, String defaultUser) {
+		if (String.isBlank(defaultUser)) {
+			this.DEFAULT_OWNER = ETC_GetAccountsWs.defaultOwner();
+		} else {
+			this.DEFAULT_OWNER = defaultUser;
+		}
 		if (users == null || users.size() == 0) {
 			this.usersByAgentCode = ETC_Utility.getUserIdByAgentCode();
 		} else {
@@ -43,18 +47,18 @@ public with sharing class ETC_GetAccountsQueue extends ETC_GetAccountsController
 			System.debug('Se procesaron: ' + upContactResults[1] + ' Registros con errores. Contactos');
 
 			if (!this.isSinglePage) {
-				ETC_GetAccountsQueue.queue(this.nextPage, false, this.usersByAgentCode);
+				ETC_GetAccountsQueue.queue(this.nextPage, false, this.usersByAgentCode, this.DEFAULT_OWNER);
 			}
 		}
 	}
 
 	@future(callout=true)
-	public static void queue(Integer page, Boolean single, Map<String,String> users) {
-		execute(page, single, users);
+	public static void queue(Integer page, Boolean single, Map<String,String> users, String defaultUser) {
+		execute(page, single, users, defaultUser);
 	}
 
-	public static void execute(Integer page, Boolean single, Map<String,String> users) {
-		ETC_GetAccountsQueue q = new ETC_GetAccountsQueue(page, single, users);
+	public static void execute(Integer page, Boolean single, Map<String,String> users, String defaultUser) {
+		ETC_GetAccountsQueue q = new ETC_GetAccountsQueue(page, single, users, defaultUser);
 		System.enqueueJob(q);
 	}
 }

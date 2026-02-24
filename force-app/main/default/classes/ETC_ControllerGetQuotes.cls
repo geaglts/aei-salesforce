@@ -9,11 +9,13 @@ public virtual with sharing class ETC_ControllerGetQuotes {
     public List<Order> orders;
     public List<OrderItem> orderItems;
     public String standardPricebookId;
+    public String DEFAULT_USER;
     // maps
     public static Map<String, String> currencyByTag = new Map<String, String>{
         'Dolares' => 'USD',
         'Euros' => 'EUR',
         'Pesos' => 'MXN'};
+	public Map<String, String> usersByAgentCode;
     
     public ETC_ControllerGetQuotes() {
         this.quoteOpportunity = new List<Opportunity>();
@@ -21,10 +23,12 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         this.quoteLineItems = new List<QuoteLineItem>();
         this.orders = new List<Order>();
         this.orderItems = new List<OrderItem>();
+        this.usersByAgentCode = new Map<String, String>();
     }
 
-    public void setGlobalParams(String pricebookId) {
+    public void setGlobalParams(String pricebookId, Map<String, String> usersByAgentCode) {
         this.standardPricebookId = pricebookId;
+        this.usersByAgentCode = usersByAgentCode;
     }
 
     public void sync(ETC_QuoteListResponseModel serviceResponse) {
@@ -67,6 +71,8 @@ public virtual with sharing class ETC_ControllerGetQuotes {
             newQuote.LineasPerdidas__c = quoteRecord.etapaoportunidad[0].LineasPerdidas;
             newQuote.LineasRechazadas__c = quoteRecord.etapaoportunidad[0].LineasRechazadas;
         }
+
+        // TODO: Get current user to set in owner record
 
         quotes.add(newQuote);
 

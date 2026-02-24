@@ -13,9 +13,20 @@ public with sharing class ETC_QueueGetQuotes extends ETC_ControllerGetQuotes imp
     public List<OrderItem> queueOrderItems;
     public Integer nextPage;
     public Boolean isSinglePage;
+	public Map<String, String> queueUsersByAgentCode;
     
-    public ETC_QueueGetQuotes(Integer page, Boolean single, String standardPricebookId) {
-        this.setGlobalParams(standardPricebookId);
+    public ETC_QueueGetQuotes(Integer page, Boolean single, String standardPricebookId, Map<String, String> users, String defaultUser) {
+		if (String.isBlank(defaultUser)) {
+			this.DEFAULT_USER = ETC_GetAccountsWs.defaultOwner();	
+		} else {
+			this.DEFAULT_USER = defaultUser;
+		}
+		if (users != null) {
+			this.queueUsersByAgentCode = users;
+		} else {
+			this.queueUsersByAgentCode = ETC_Utility.getUserIdByAgentCode();
+		}
+		this.setGlobalParams(standardPricebookId, this.queueUsersByAgentCode);
         this.sync(ETC_GetQuoteWs.getByPage(page));
         this.queueQuoteOpportunity = this.quoteOpportunity;
         this.queueQuotes = this.quotes;
@@ -61,18 +72,18 @@ public with sharing class ETC_QueueGetQuotes extends ETC_ControllerGetQuotes imp
 			System.debug('Se procesaron: ' + upOrderItemResults[1] + ' Registros con errores. Productos de pedido');
 
 			if (!this.isSinglePage) {
-				ETC_QueueGetQuotes.queue(this.nextPage, false, this.standardPricebookId);
+				ETC_QueueGetQuotes.queue(this.nextPage, false, this.standardPricebookId, this.queueUsersByAgentCode, this.DEFAULT_USER);
 			}
 		}
     }
 
     @future(callout=true)
-	public static void queue(Integer page, Boolean single, String standardPricebookId) {
-		execute(page, single, standardPricebookId);
+	public static void queue(Integer page, Boolean single, String standardPricebookId, Map<String, String> users, String defaultUser) {
+		execute(page, single, standardPricebookId, users, defaultUser);
 	}
 
-	public static void execute(Integer page, Boolean single, String standardPricebookId) {
-		ETC_QueueGetQuotes q = new ETC_QueueGetQuotes(page, single, standardPricebookId);
+	public static void execute(Integer page, Boolean single, String standardPricebookId, Map<String, String> users, String defaultUser) {
+		ETC_QueueGetQuotes q = new ETC_QueueGetQuotes(page, single, standardPricebookId, users, defaultUser);
 		System.enqueueJob(q);
 	}
 }
