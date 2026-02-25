@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <!-- THIS XML CONTAIN LWC AND TABS TO DEPLOY IN PRODUCTION -->
+    <!-- sf project deploy start -x .\manifest\PDEV_0_4_0.xml -o aei-production -->
     <types>
         <members>etcGetQuote</members>
         <name>LightningComponentBundle</name>

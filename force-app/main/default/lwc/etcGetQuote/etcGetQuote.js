@@ -28,10 +28,8 @@ export default class EtcGetQuote extends LightningElement {
   loading = false;
   isUpdate = false;
 
-  clearView() {
+  resetParams() {
     this.quoteData = {};
-    this.formRef = this.template.querySelector(".searchForm");
-    this.formRef.reset();
     this.opportunityUrl = null;
     this.quoteUrl = null;
     this.loading = false;
@@ -39,8 +37,15 @@ export default class EtcGetQuote extends LightningElement {
     this.createdOrders = [];
   }
 
+  clearView() {
+    this.formRef = this.template.querySelector(".searchForm");
+    this.formRef.reset();
+    this.resetParams();
+  }
+
   async searchQuote(evt) {
     evt.preventDefault();
+    this.resetParams();
     this.loading = true;
     try {
       const data = Object.fromEntries(new FormData(evt.currentTarget));

@@ -7,6 +7,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
     public List<Quote> quotes;
     public List<QuoteLineItem> quoteLineItems;
     public List<Order> orders;
+    public List<Order> childrenOrders;
     public List<OrderItem> orderItems;
     public String standardPricebookId;
     public String DEFAULT_USER;
@@ -22,6 +23,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         this.quotes = new List<Quote>();
         this.quoteLineItems = new List<QuoteLineItem>();
         this.orders = new List<Order>();
+        this.childrenOrders = new List<Order>();
         this.orderItems = new List<OrderItem>();
         this.usersByAgentCode = new Map<String, String>();
     }
@@ -154,6 +156,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
     public void buildSObjectOrder(ETC_QuoteListResponseModel.Data newQuoteData, ETC_QuoteListResponseModel.DestinoCta[] ordersToCreate, String quoteExternalId, String ownerId) {
         Map<String, List<Object>> orderRecordsToCreate = generateOrderRecordsWithItems(newQuoteData, ordersToCreate, this.standardPricebookId, false, quoteExternalId, ownerId);        
         this.orders.addAll((List<Order>) orderRecordsToCreate.get('orders'));        
+        this.childrenOrders.addAll((List<Order>) orderRecordsToCreate.get('childrenOrders'));        
         this.orderItems.addAll((List<OrderItem>) orderRecordsToCreate.get('orderItems'));
     }
 
@@ -164,6 +167,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         Map<String, List<Object>> outputRecords = new Map<String, List<Object>>();
         
         List<Order> newOrders = new List<Order>();
+        List<Order> newChildrenOrders = new List<Order>();
         List<OrderItem> newOrderLineItems = new List<OrderItem>();
         for (ETC_QuoteListResponseModel.DestinoCta orderItem : ordersToCreate) {
             if (orderItem.Mov == 'Remision' || String.isBlank(orderItem.MovID)) {
@@ -224,13 +228,14 @@ public virtual with sharing class ETC_ControllerGetQuotes {
                 List<Order> adjustedOrders = (List<Order>) adjustmentOrders.get('orders');
                 List<OrderItem> adjustedOrderItems = (List<OrderItem>) adjustmentOrders.get('orderItems');
                 
-                newOrders.addAll(adjustedOrders);
+                newChildrenOrders.addAll(adjustedOrders);
                 newOrderLineItems.addAll(adjustedOrderItems);
             }
 
         }
 
         outputRecords.put('orders', newOrders);
+        outputRecords.put('childrenOrders', newChildrenOrders);
         outputRecords.put('orderItems', newOrderLineItems);
 
         return outputRecords;

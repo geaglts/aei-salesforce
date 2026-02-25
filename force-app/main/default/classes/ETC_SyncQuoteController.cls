@@ -12,6 +12,8 @@ public with sharing class ETC_SyncQuoteController {
         'venta perdida' => Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Venta_perdida').getRecordTypeId(),
         'venta rechazada' => Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Venta_rechazada').getRecordTypeId()
     };
+
+    public static String DEFAULT_OWNER;
     
     @AuraEnabled(cacheable=false)
     public static Account getAccount(String externalId) {
@@ -57,6 +59,7 @@ public with sharing class ETC_SyncQuoteController {
 
     @AuraEnabled(cacheable=false)
     public static Map<String, String> saveQuoteRecord(String rawNewQuoteData) {
+        Map<String, String> ownersByAgent = ETC_Utility.getUserIdByAgentCode();
         String standardPricebook = Test.isRunningTest() ? Test.getStandardPricebookId() : [SELECT Id FROM Pricebook2 WHERE IsStandard = true LIMIT 1].Id;
         Map<String, String> recordLinks = new Map<String, String>();
         ETC_AeiQuoteModel newQuoteData = ETC_AeiQuoteModel.parse(rawNewQuoteData);
@@ -67,6 +70,11 @@ public with sharing class ETC_SyncQuoteController {
         // }
 
         Opportunity newOpp = new Opportunity();
+        if (ownersByAgent.containsKey(newQuoteData.data.Agente)) {
+            ETC_SyncQuoteController.DEFAULT_OWNER = ownersByAgent.get(newQuoteData.data.Agente);
+        } else {
+            ETC_SyncQuoteController.DEFAULT_OWNER = ownersByAgent.get(ETC_GetAccountsWs.defaultOwner());
+        }
         try {
             if (String.isBlank(newQuoteData.data.sfOppId)) {
                 newOpp.Name = newQuoteData.data.MovID;
@@ -74,6 +82,7 @@ public with sharing class ETC_SyncQuoteController {
                 newOpp.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
                 newOpp.Account = new Account(Cliente__c = newQuoteData.data.Cliente);
             }
+            newOpp.OwnerId = ETC_SyncQuoteController.DEFAULT_OWNER;
             newOpp.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;
             if (newQuoteData.data.EtapaOportunidad.size() > 0) {
                 newOpp.StageName = newQuoteData.data.EtapaOportunidad[0].EtapaOportunidad;
@@ -92,6 +101,7 @@ public with sharing class ETC_SyncQuoteController {
         Quote newQuote = new Quote();
         try {
             newQuote.Name = newQuoteData.data.MovID;
+            newQuote.OwnerId = ETC_SyncQuoteController.DEFAULT_OWNER;
             newQuote.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
             newQuote.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;
             newQuote.Status = newQuoteData.data.Estatus;
@@ -135,9 +145,32 @@ public with sharing class ETC_SyncQuoteController {
 
             Map<String, List<Object>> ordersToCreate = generateOrderRecordsWithItems(newQuoteData, newQuoteData.data.DestinoCta, newQuote, newOpp, standardPricebook, false);
             List<Order> newOrders = (List<Order>) ordersToCreate.get('orders');
+            List<Order> newChildrenOrders = (List<Order>) ordersToCreate.get('chidlrenOrders');
             List<OrderItem> newOrderItems = (List<OrderItem>) ordersToCreate.get('orderItems');
+
+            // System.debug(JSON.serializePretty(newOrders));
+
             upsert newOrders Id_de_Movimiento__c;
+            upsert newChildrenOrders Id_de_Movimiento__c;
             upsert newOrderItems External_Id__c;
+
+			// Database.UpsertResult[] orderResults = Database.upsert(newOrders, Order.Fields.Id_de_Movimiento__c, false);
+			// Database.UpsertResult[] childrenOrderResults = Database.upsert(newChildrenOrders, Order.Fields.Id_de_Movimiento__c, false);
+			// Database.UpsertResult[] orderItemResults = Database.upsert(newOrderItems, OrderItem.Fields.External_Id__c, false);
+
+			// List<Integer> upOrderResults = ETC_Utility.showQueueResult(orderResults, 'Pedidos', 0 - 1, false);
+			// System.debug('Se procesaron: ' + upOrderResults[0] + ' Registros exitosos. Pedidos');
+			// System.debug('Se procesaron: ' + upOrderResults[1] + ' Registros con errores. Pedidos');
+			
+            // List<Integer> upChildrenOrderResults = ETC_Utility.showQueueResult(childrenOrderResults, 'Pedidos Hijos', 0 - 1, false);
+			// System.debug('Se procesaron: ' + upChildrenOrderResults[0] + ' Registros exitosos. Pedidos Hijos');
+			// System.debug('Se procesaron: ' + upChildrenOrderResults[1] + ' Registros con errores. Pedidos Hijos');
+
+			// List<Integer> upOrderItemResults = ETC_Utility.showQueueResult(orderItemResults, 'Productos de pedido', 0 - 1, false);
+			// System.debug('Se procesaron: ' + upOrderItemResults[0] + ' Registros exitosos. Productos de pedido');
+			// System.debug('Se procesaron: ' + upOrderItemResults[1] + ' Registros con errores. Productos de pedido');
+
+            newOrders.addAll(newChildrenOrders);
 
             recordLinks.put('createdOrders', JSON.serialize(newOrders));
         } catch (Exception e) {
@@ -158,6 +191,7 @@ public with sharing class ETC_SyncQuoteController {
         Map<String, List<Object>> outputRecords = new Map<String, List<Object>>();
         
         List<Order> newOrders = new List<Order>();
+        List<Order> newChildrenOrders = new List<Order>();
         List<OrderItem> newOrderLineItems = new List<OrderItem>();
         for (ETC_AeiQuoteModel.DestinoCta orderItem : ordersToCreate) {
             if (orderItem.Mov == 'Remision' || String.isBlank(orderItem.MovID)) {
@@ -169,6 +203,7 @@ public with sharing class ETC_SyncQuoteController {
             System.debug('-------------------------');
             Order newOrderRecord = new Order();
             newOrderRecord.Name = orderItem.MovID;
+            newOrderRecord.OwnerId = ETC_SyncQuoteController.DEFAULT_OWNER;
             newOrderRecord.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
             newOrderRecord.QuoteId = newQuote.Id;
             newOrderRecord.Id_de_Movimiento__c = orderItem.MovID;
@@ -219,13 +254,14 @@ public with sharing class ETC_SyncQuoteController {
                 List<Order> adjustedOrders = (List<Order>) adjustmentOrders.get('orders');
                 List<OrderItem> adjustedOrderItems = (List<OrderItem>) adjustmentOrders.get('orderItems');
                 
-                newOrders.addAll(adjustedOrders);
+                newChildrenOrders.addAll(adjustedOrders);
                 newOrderLineItems.addAll(adjustedOrderItems);
             }
 
         }
 
         outputRecords.put('orders', newOrders);
+        outputRecords.put('chidlrenOrders', newChildrenOrders);
         outputRecords.put('orderItems', newOrderLineItems);
 
         return outputRecords;
