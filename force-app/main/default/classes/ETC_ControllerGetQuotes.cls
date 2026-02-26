@@ -209,17 +209,22 @@ public virtual with sharing class ETC_ControllerGetQuotes {
             }
             for (ETC_QuoteListResponseModel.DetalleDtoCta orderLine : orderItemsToSave) {
                 Order orderRef = new Order(Id_de_Movimiento__c = orderItem.MovID);
-                QuoteLineItem quoteLineItemRef = new QuoteLineItem(External_Id__c=quoteExternalId + '_' + orderLine.AplicaRenglon);
                 Product2 productRef = new Product2(External_Id__c=orderLine.Articulo);
                 PricebookEntry pbEntryRef = new PricebookEntry(External_Id__c=currencyByTag.get(newQuoteData.Moneda).toLowerCase() + '_' + orderLine.Articulo);
+                
                 OrderItem newOrderLine = new OrderItem();
                 newOrderLine.Order = orderRef;
                 newOrderLine.Quantity = orderLine.Cantidad;
                 newOrderLine.UnitPrice = orderLine.Precio;
                 newOrderLine.Product2 = productRef;
                 newOrderLine.PricebookEntry = pbEntryRef;
-                newOrderLine.QuoteLineItem = quoteLineItemRef;
-                newOrderLine.External_Id__c = newOrderRecord.Id_de_Movimiento__c + '_' + orderLine.Articulo + '_' + orderLine.AplicaRenglon;
+                if (String.isNotBlank(String.valueOf(orderLine.AplicaRenglon))) {
+                    QuoteLineItem quoteLineItemRef = new QuoteLineItem(External_Id__c=quoteExternalId + '_' + orderLine.AplicaRenglon);
+                    newOrderLine.QuoteLineItem = quoteLineItemRef;
+                    newOrderLine.External_Id__c = newOrderRecord.Id_de_Movimiento__c + '_' + orderLine.Articulo + '_' + orderLine.AplicaRenglon;
+                } else {
+                    newOrderLine.External_Id__c = newOrderRecord.Id_de_Movimiento__c + '_' + orderLine.Articulo + '_' + orderLine.OrigenTipo;
+                }
                 newOrderLineitems.add(newOrderLine);
             }
 

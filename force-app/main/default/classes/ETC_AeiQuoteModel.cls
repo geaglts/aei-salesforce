@@ -138,6 +138,8 @@ public class ETC_AeiQuoteModel {
 
     public class DetalleDtoCta {
         @AuraEnabled
+        public String OrigenTipo; // "Ajuste"
+        @AuraEnabled
         public String Aplica; // "Cotizacion"
         @AuraEnabled
         public String AplicaID; // "CAR13"
