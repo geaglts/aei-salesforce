@@ -81,6 +81,8 @@ public with sharing class ETC_SyncQuoteController {
                 newOpp.CloseDate = Date.valueOf(newQuoteData.data.FechaEmision);
                 newOpp.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
                 newOpp.Account = new Account(Cliente__c = newQuoteData.data.Cliente);
+            } else {
+                newOpp.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
             }
             newOpp.OwnerId = ETC_SyncQuoteController.DEFAULT_OWNER;
             newOpp.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;

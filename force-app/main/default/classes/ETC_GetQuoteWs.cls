@@ -13,6 +13,9 @@ public with sharing class ETC_GetQuoteWs  extends ETC_Callout {
         callout.request.setHeader('Authorization', 'Bearer ' + token);
 
         HttpResponse rawQuote = sendCallout(callout);
+        System.debug('========================+++++++BODY+++++++==========================');
+        System.debug(rawQuote.getBody());
+        System.debug('========================+++++++BODY+++++++==========================');
 
         if (rawQuote.getStatusCode() == 200 || Test.isRunningTest()) {
             String serviceBody = Test.isRunningTest() ? (queryParams.contains('page') ? this.mdt.list_raw_response__c : this.mdt.raw_response__c) : rawQuote.getBody();
