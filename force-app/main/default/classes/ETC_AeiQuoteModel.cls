@@ -4,9 +4,9 @@ public class ETC_AeiQuoteModel {
 
     public class Data {
         @AuraEnabled
-        public Integer ID; // 993
+        public Decimal ID; // 993
         @AuraEnabled
-        public Integer Sucursal; // 2
+        public Decimal Sucursal; // 2
         @AuraEnabled
         public String Cliente; // "94"
         @AuraEnabled
@@ -61,7 +61,7 @@ public class ETC_AeiQuoteModel {
 
     public class SucursalCta {
         @AuraEnabled
-        public Integer Sucursal; // 2
+        public Decimal Sucursal; // 2
         @AuraEnabled
         public String Nombre; // "CARMEN"
         @AuraEnabled
@@ -109,7 +109,7 @@ public class ETC_AeiQuoteModel {
 
     public class DestinoCta {
         @AuraEnabled
-        public Integer ID; // 995
+        public Decimal ID; // 995
         @AuraEnabled
         public String Mov; // "Pedido"
         @AuraEnabled
@@ -144,7 +144,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String AplicaID; // "CAR13"
         @AuraEnabled
-        public Integer AplicaRenglon; // 2048
+        public Decimal AplicaRenglon; // 2048
         @AuraEnabled
         public String Articulo; // "EL-AEC0-0041"
         @AuraEnabled
@@ -152,11 +152,11 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String Unidad; // "ML"
         @AuraEnabled
-        public Integer Cantidad; // 600
+        public Decimal Cantidad; // 600
         @AuraEnabled
         public Double Precio; // 43.59
         @AuraEnabled
-        public Integer Impuesto1; // 16
+        public Decimal Impuesto1; // 16
         @AuraEnabled
         public Double Costo; // 34.6255
         @AuraEnabled
@@ -167,7 +167,7 @@ public class ETC_AeiQuoteModel {
 
     public class VentaDCta {
         @AuraEnabled
-        public Integer Renglon; // 2048
+        public Decimal Renglon; // 2048
         @AuraEnabled
         public String RenglonTipo; // "L"
         @AuraEnabled
@@ -177,11 +177,11 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String ThoCodigoFabricante; // "UR-3X12-AR"
         @AuraEnabled
-        public Integer Cantidad; // 600
+        public Decimal Cantidad; // 600
         @AuraEnabled
         public Double Precio; // 43.59
         @AuraEnabled
-        public Integer Impuesto1; // 16
+        public Decimal Impuesto1; // 16
         @AuraEnabled
         public Double Costo; // 34.6255
         @AuraEnabled
@@ -198,15 +198,15 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String Estatus;
         @AuraEnabled
-        public Integer TotalLineas;
+        public Decimal TotalLineas;
         @AuraEnabled
-        public Integer LineasPendientes;
+        public Decimal LineasPendientes;
         @AuraEnabled
-        public Integer LineasPedido;
+        public Decimal LineasPedido;
         @AuraEnabled
-        public Integer LineasPerdidas;
+        public Decimal LineasPerdidas;
         @AuraEnabled
-        public Integer LineasRechazadas;
+        public Decimal LineasRechazadas;
         @AuraEnabled
         public String EtapaOportunidad;
     }
