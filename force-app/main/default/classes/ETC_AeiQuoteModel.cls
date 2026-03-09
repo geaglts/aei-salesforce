@@ -121,6 +121,8 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String Origen; // "Cotizacion"
         @AuraEnabled
+        public String DestMotivo; // "Mercadeo"
+        @AuraEnabled
         public String OrigenID; // "CAR13"
         @AuraEnabled
         public String Agente; // "HRODRIGUEZ"
@@ -156,6 +158,8 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public Double Precio; // 43.59
         @AuraEnabled
+        public Decimal DescuentoLinea; // 1
+        @AuraEnabled
         public Decimal Impuesto1; // 16
         @AuraEnabled
         public Double Costo; // 34.6255
@@ -180,6 +184,8 @@ public class ETC_AeiQuoteModel {
         public Decimal Cantidad; // 600
         @AuraEnabled
         public Double Precio; // 43.59
+        @AuraEnabled
+        public Decimal DescuentoLinea; // 1
         @AuraEnabled
         public Decimal Impuesto1; // 16
         @AuraEnabled

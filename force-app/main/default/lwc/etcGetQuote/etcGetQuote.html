@@ -16,7 +16,8 @@
                 <a if:true={opportunityUrl} href={opportunityUrl} target="_blank">Oportunidad</a>
                 <a if:true={quoteUrl} href={quoteUrl} target="_blank">Cotizacion</a>
                 <template for:each={createdOrders} for:item="order">
-                    <a key={order.Id} href={order.link} target="_blank">{order.Tipo_de_movimiento_bandera__c}: {order.Name}</a>
+                    <a key={order.Id} href={order.link} target="_blank">{order.Tipo_de_movimiento_bandera__c}:
+                        {order.Name}</a>
                 </template>
             </div>
             <div class="quoteHeaderInfo">
@@ -25,26 +26,13 @@
             </div>
             <div class="quoteDataInfo">
                 <div class="grid-col-2">
-                    <lightning-record-picker
-                        id="client-record"
-                        label="Cliente"
-                        placeholder="Cliente"
-                        object-api-name="Account"
-                        data-type="client"
-                        class="label-input"
-                        value={quoteData.data._sfAccount.Id}
-                    >
+                    <lightning-record-picker id="client-record" label="Cliente" placeholder="Cliente"
+                        object-api-name="Account" data-type="client" class="label-input"
+                        value={quoteData.data._sfAccount.Id}>
                     </lightning-record-picker>
-                    <lightning-record-picker
-                        id="opportunity-record"
-                        label="Oportunidad"
-                        placeholder="Oportunidad"
-                        object-api-name="Opportunity"
-                        data-type="opportunity"
-                        class="label-input"
-                        value={quoteData.data._sfOpp.Id}
-                        onchange={onChangeOpportunity}
-                    >
+                    <lightning-record-picker id="opportunity-record" label="Oportunidad" placeholder="Oportunidad"
+                        object-api-name="Opportunity" data-type="opportunity" class="label-input"
+                        value={quoteData.data._sfOpp.Id} onchange={onChangeOpportunity}>
                     </lightning-record-picker>
                 </div>
                 <div class="grid-col-3">
@@ -61,24 +49,30 @@
                     <h2>Productos de la cotización</h2>
                     <div class="lineProductsContainer">
                         <template for:each={quoteData.data.VentaDCta} for:item="lineItem">
-                            <div key={lineItem.Renglon} class="lineProductCard">
-                                <div class="sub-title">
-                                    <span>Articulo</span>
-                                    <p>{lineItem.Articulo}</p>
-                                </div>
-                                <div class="sub-title mt-1">
-                                    <span>Código de fabricante</span>
-                                    <p>{lineItem.ThoCodigoFabricante}</p>
-                                </div>
-                                <div class="grid-col-2 mt-1">
-                                    <div class="sub-title">
-                                        <span>Cantidad</span>
-                                        <p>{lineItem.Cantidad} {lineItem.Unidad}</p>
+                            <div key={lineItem.Renglon} class="card-container">
+                                <header class="card-header">
+                                    <span class="label-accent">Artículo</span>
+                                    <h3 class="product-title">{lineItem.Articulo}</h3>
+                                    <p class="sku-text">Ref: {lineItem.ThoCodigoFabricante}</p>
+                                </header>
+                                <div class="card-body">
+                                    <div class="stats-grid">
+                                        <div class="stat-item">
+                                            <span class="label">Cantidad</span>
+                                            <p class="value">
+                                                {lineItem.Cantidad} <span class="unit">{lineItem.Unidad}</span>
+                                            </p>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="label">Precio Unitario</span>
+                                            <p class="value">${lineItem.Precio}</p>
+                                        </div>
                                     </div>
-                                    <div class="sub-title">
-                                        <span>Precio</span>
-                                        <p>{lineItem.Precio}</p>
-                                    </div>
+                                    <template if:true={lineItem.DescuentoLinea}>
+                                        <div class="discount-pill">
+                                            -{lineItem.DescuentoLinea}%
+                                        </div>
+                                    </template>
                                 </div>
                             </div>
                         </template>
@@ -88,20 +82,17 @@
                     <h2>Pedidos</h2>
                     <div class="lineProductsContainer">
                         <template for:each={quoteData.data.DestinoCta} for:item="lineItem">
-                            <div key={lineItem.Id} class="lineProductCard">
-                                <div class="grid-col-2">
-                                    <div class="sub-title">
-                                        <span>Tipo</span>
-                                        <p>{lineItem.Mov}</p>
-                                    </div>
-                                    <div class="sub-title">
-                                        <span>Folio</span>
-                                        <p>{lineItem.MovID}</p>
-                                    </div>
+                            <div key={lineItem.Id} class="card-container">
+                                <div class="card-header">
+                                    <span class="label-accent">TIPO DE MOVIMIENTO</span>
+                                    <p class="product-title">{lineItem.Mov}</p>
+                                    <p class="sku-text">Folio: {lineItem.MovID}</p>
                                 </div>
-                                <div class="sub-title">
-                                    <span>Fecha de emisión</span>
-                                    <p>{lineItem.FechaEmision}</p>
+                                <div class="card-body">
+                                    <div class="stat-item">
+                                        <span class="label">Fecha de emisión</span>
+                                        <p class="value">{lineItem.FechaEmision}</p>
+                                    </div>
                                 </div>
                             </div>
                         </template>

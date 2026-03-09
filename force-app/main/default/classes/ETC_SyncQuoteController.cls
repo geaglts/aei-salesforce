@@ -127,6 +127,7 @@ public with sharing class ETC_SyncQuoteController {
                 newQuoteItem.QuoteId = newQuote.Id;
                 newQuoteItem.Quantity = quoteItem.Cantidad;
                 newQuoteItem.UnitPrice = quoteItem.Precio;
+                newQuoteItem.Discount = quoteItem.DescuentoLinea;
                 newQuoteItem.Product2 = productRef;
                 newQuoteItem.PricebookEntry = pbEntryRef;
 
@@ -208,6 +209,7 @@ public with sharing class ETC_SyncQuoteController {
             newOrderRecord.OwnerId = ETC_SyncQuoteController.DEFAULT_OWNER;
             newOrderRecord.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
             newOrderRecord.QuoteId = newQuote.Id;
+            newOrderRecord.Motivo__c = orderItem.DestMotivo;
             newOrderRecord.Id_de_Movimiento__c = orderItem.MovID;
             newOrderRecord.Account = new Account(Cliente__c = newQuoteData.data.Cliente);
             newOrderRecord.Status = orderItem.Estatus;
@@ -243,6 +245,7 @@ public with sharing class ETC_SyncQuoteController {
                 newOrderLine.Order = orderRef;
                 newOrderLine.Quantity = orderLine.Cantidad;
                 newOrderLine.UnitPrice = orderLine.Precio;
+                newOrderLine.Descuento__c = orderLine.DescuentoLinea;
                 newOrderLine.Product2 = productRef;
                 newOrderLine.PricebookEntry = pbEntryRef;
 

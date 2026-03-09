@@ -1,3 +1,12 @@
+:host {
+    /* Variables locales al componente */
+    --brand-color: #0176d3; /* Azul Salesforce suave */
+    --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    --card-radius: 12px;
+    display: block;
+    margin-bottom: 1rem;
+}
+
 main {
     padding: 1em;
     border-radius: 4px;
@@ -8,10 +17,26 @@ main {
 
 h2 {
     text-align: center;
-    font-size: 14pt;
-    font-weight: bold;
-    border-bottom: 1px solid black;
-    padding-bottom: .5em
+    font-size: 1.25rem; /* Usamos rem para mejor accesibilidad */
+    font-weight: 700;
+    color: #1a1b1f;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    letter-spacing: 0.025em;
+    border: none; /* Quitamos el borde sólido */
+}
+
+h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px; /* Línea corta y elegante */
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--brand-color, #0176d3), transparent);
+    border-radius: 10px;
 }
 
 .grid-col-2 {
@@ -127,4 +152,88 @@ p {
 
 .mt-1 {
     margin-top: 4px;
+}
+
+.card-container {
+    background: #ffffff;
+    border-radius: var(--card-radius);
+    padding: 1.25rem;
+    box-shadow: var(--card-shadow);
+    border: 1px solid #f0f0f0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    border-color: var(--brand-color);
+}
+
+/* Tipografía y Jerarquía */
+.label-accent {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--brand-color);
+    letter-spacing: 0.05rem;
+}
+
+.product-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a1a1b;
+    margin: 2px 0;
+    line-height: 1.2;
+}
+
+.sku-text {
+    font-size: 0.75rem;
+    color: #747474;
+    margin-bottom: 1rem;
+}
+
+/* Distribución de datos */
+.card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: 1rem;
+    border-top: 1px solid #f4f4f4;
+}
+
+.stats-grid {
+    display: flex;
+    gap: 2rem;
+}
+
+.label {
+    display: block;
+    font-size: 0.7rem;
+    color: #747474;
+    margin-bottom: 2px;
+}
+
+.value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #080808;
+}
+
+.unit {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #aeaeae;
+}
+
+/* Elemento Minimalista 2026: El Descuento */
+.discount-pill {
+    background: #eaf5ea;
+    color: #2e844a;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1px solid #c9e7ca;
 }

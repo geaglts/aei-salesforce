@@ -138,6 +138,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         newQuoteItem.Product2 = productRef;
         newQuoteItem.PricebookEntry = pbEntryRef;
         newQuoteItem.Renglon_Tipo__c = quoteItem.RenglonTipo;
+        newQuoteItem.Discount = quoteItem.DescuentoLinea;
         newQuoteItem.Tho_Codigo_Fabricante__c = quoteItem.ThoCodigoFabricante;
         newQuoteItem.Impuesto1__c = String.valueOf(quoteItem.Impuesto1);
         newQuoteItem.Costo__c = String.valueOf(quoteItem.Costo);
@@ -181,6 +182,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
             newOrderRecord.OwnerId = ownerId;
             newOrderRecord.Name = orderItem.MovID;
             newOrderRecord.CurrencyIsoCode = currencyByTag.get(newQuoteData.Moneda);
+            newOrderRecord.Motivo__c = orderItem.DestMotivo;
             newOrderRecord.Quote = new Quote(N_mero_de_cotizaci_n__c = quoteExternalId);
             newOrderRecord.Id_de_Movimiento__c = orderItem.MovID;
             newOrderRecord.Account = new Account(Cliente__c = newQuoteData.Cliente);
@@ -216,6 +218,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
                 newOrderLine.Order = orderRef;
                 newOrderLine.Quantity = orderLine.Cantidad;
                 newOrderLine.UnitPrice = orderLine.Precio;
+                newOrderLine.Descuento__c = orderLine.DescuentoLinea;
                 newOrderLine.Product2 = productRef;
                 newOrderLine.PricebookEntry = pbEntryRef;
                 if (String.isNotBlank(String.valueOf(orderLine.AplicaRenglon))) {

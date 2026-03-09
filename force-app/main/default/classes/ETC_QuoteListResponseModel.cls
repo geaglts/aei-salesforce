@@ -52,6 +52,8 @@ public class ETC_QuoteListResponseModel {
         @AuraEnabled
         public String Origen; // "Cotizacion"
         @AuraEnabled
+        public String DestMotivo; // "Mercadeo"
+        @AuraEnabled
         public String OrigenID; // "CAR13"
         @AuraEnabled
         public String Agente; // "HRODRIGUEZ"
@@ -86,6 +88,7 @@ public class ETC_QuoteListResponseModel {
         public Decimal Cantidad; // 600
         @AuraEnabled
         public Double Precio; // 43.59
+        public Decimal DescuentoLinea; // 1
         @AuraEnabled
         public Decimal Impuesto1; // 16
         @AuraEnabled
@@ -131,6 +134,7 @@ public class ETC_QuoteListResponseModel {
         public String ThoCodigoFabricante; // "EL-SEM0-GEN"
         public Decimal Cantidad; // 1
         public Decimal Precio; // 8607.22
+        public Decimal DescuentoLinea; // 1
         public Decimal DescuentoImporte; // 0
         public Decimal Impuesto1; // 16
         public Decimal Costo; // 0
