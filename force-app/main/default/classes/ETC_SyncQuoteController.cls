@@ -82,6 +82,7 @@ public with sharing class ETC_SyncQuoteController {
                 newOpp.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
                 newOpp.Account = new Account(Cliente__c = newQuoteData.data.Cliente);
             } else {
+                newOpp.Id = newQuoteData.data.sfOppId;
                 newOpp.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
             }
             newOpp.OwnerId = ETC_SyncQuoteController.DEFAULT_OWNER;
@@ -89,8 +90,11 @@ public with sharing class ETC_SyncQuoteController {
             if (newQuoteData.data.EtapaOportunidad.size() > 0) {
                 newOpp.StageName = newQuoteData.data.EtapaOportunidad[0].EtapaOportunidad;
             }
-            System.debug(newOpp);
-            upsert newOpp N_mero_de_cotizaci_n__c;
+            if (String.isBlank(newQuoteData.data.sfOppId)) {
+                insert newOpp;
+            } else {
+                update newOpp;
+            }
             recordLinks.put('opportunityUrl', ETC_SyncQuoteController.generateRecordLink(newOpp.Id));
             recordLinks.put('opportunityCreatedId', newOpp.Id);
         } catch (Exception e) {

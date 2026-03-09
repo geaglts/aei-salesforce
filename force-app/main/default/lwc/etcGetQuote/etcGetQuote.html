@@ -98,25 +98,20 @@
                         </template>
                         <template for:each={quoteData.data.DestinoCta} for:item="lineItem">
                             <template for:each={lineItem.DestPedidoCte} for:item="adjustmentLineItem">
-                                <div key={adjustmentLineItem.Id} class="lineProductCard">
-                                    <div class="grid-col-2">
-                                        <div class="sub-title">
-                                            <span>Tipo</span>
-                                            <p>{adjustmentLineItem.Mov}</p>
-                                        </div>
-                                        <div class="sub-title">
-                                            <span>Folio</span>
-                                            <p>{adjustmentLineItem.MovID}</p>
-                                        </div>
+                                <div key={adjustmentLineItem.Id} class="card-container">
+                                    <div class="card-header">
+                                        <span class="label-accent">TIPO DE MOVIMIENTO</span>
+                                        <p class="product-title">{adjustmentLineItem.Mov}</p>
+                                        <p class="sku-text">Folio: {adjustmentLineItem.MovID}</p>
                                     </div>
-                                    <div class="grid-col-2">
-                                        <div class="sub-title">
-                                            <span>Origen</span>
-                                            <p>{adjustmentLineItem.OrigenID}</p>
+                                    <div class="card-body">
+                                        <div class="stat-item">
+                                            <span class="label">Origen</span>
+                                            <p class="value">{adjustmentLineItem.OrigenID}</p>
                                         </div>
-                                        <div class="sub-title">
-                                            <span>Fecha de emisión</span>
-                                            <p>{adjustmentLineItem.FechaEmision}</p>
+                                        <div class="stat-item">
+                                            <span class="label">Fecha de emisión</span>
+                                            <p class="value">{adjustmentLineItem.FechaEmision}</p>
                                         </div>
                                     </div>
                                 </div>

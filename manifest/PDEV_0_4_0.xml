@@ -6,13 +6,13 @@
         <members>etcGetQuote</members>
         <name>LightningComponentBundle</name>
     </types>
-    <types>
+    <!-- <types>
         <members>Consultar_cotizaci_n</members>
         <name>CustomTab</name>
     </types>
     <types>
         <members>Consultar_cotizaci_n</members>
         <name>FlexiPage</name>
-    </types>
+    </types> -->
     <version>64.0</version>
 </Package>
