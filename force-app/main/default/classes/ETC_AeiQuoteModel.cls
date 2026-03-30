@@ -16,6 +16,12 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String FechaEmision; // "2022-05-03T00:00:00.000Z"
         @AuraEnabled
+        public String NomProspecto;
+        @AuraEnabled
+        public String TelProspecto;
+        @AuraEnabled
+        public String EmailProspecto;
+        @AuraEnabled
         public String FechaOriginal;
         @AuraEnabled
         public String Concepto; // "Compra"
@@ -57,6 +63,8 @@ public class ETC_AeiQuoteModel {
         public List<VentaDCta> VentaDCta;
         @AuraEnabled
         public List<EtapaOportunidadDto> EtapaOportunidad;
+        public List<FamiliaCotDto> FamiliaCot;
+        public List<MotivoCotDto> MotivosCot;
     }
 
     public class SucursalCta {
@@ -215,6 +223,28 @@ public class ETC_AeiQuoteModel {
         public Decimal LineasRechazadas;
         @AuraEnabled
         public String EtapaOportunidad;
+    }
+
+    public class FamiliaCotDto {
+        @AuraEnabled
+        public String Mov;
+        @AuraEnabled
+        public String MovID;
+        @AuraEnabled
+        public String Familia;
+    }
+
+    public class MotivoCotDto {
+        @AuraEnabled
+        public String Movl; //"Cotizacion"
+        @AuraEnabled
+        public String MovIDl; //"MID40601"
+        @AuraEnabled
+        public String DestMovCotl; //"Pedido"
+        @AuraEnabled
+        public String DestMovIDCotl; //"MID16776"
+        @AuraEnabled
+        public String MotivoCierrel; //"Compra"
     }
 
     public static ETC_AeiQuoteModel parse(String jsonString) {

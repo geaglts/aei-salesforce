@@ -36,6 +36,8 @@ public class ETC_QuoteListResponseModel {
         public List<DestinoCta> destinocta;
         public List<Ventadcta> ventadcta;
         public List<Etapaoportunidad> etapaoportunidad;
+        public List<FamiliaCotDto> FamiliaCot;
+        public List<MotivoCotDto> MotivosCot;
     }
 
     public class DestinoCta {
@@ -151,6 +153,28 @@ public class ETC_QuoteListResponseModel {
         public Decimal LineasPerdidas; // 0
         public Decimal LineasRechazadas; // 0
         public String EtapaOportunidad; // "Propuesta Financiera"
+    }
+
+    public class FamiliaCotDto {
+        @AuraEnabled
+        public String Mov;
+        @AuraEnabled
+        public String MovID;
+        @AuraEnabled
+        public String Familia;
+    }
+
+    public class MotivoCotDto {
+        @AuraEnabled
+        public String Movl; //"Cotizacion"
+        @AuraEnabled
+        public String MovIDl; //"MID40601"
+        @AuraEnabled
+        public String DestMovCotl; //"Pedido"
+        @AuraEnabled
+        public String DestMovIDCotl; //"MID16776"
+        @AuraEnabled
+        public String MotivoCierrel; //"Compra"
     }
 
     public static ETC_QuoteListResponseModel parse(String jsonString) {

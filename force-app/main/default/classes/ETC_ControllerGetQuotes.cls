@@ -56,6 +56,9 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         }
         newQuote.Name = quoteExternalId;
         newQuote.CurrencyIsoCode = currencyByTag.get(quoteRecord.Moneda);
+        newQuote.Nombre_prospecto__c = quoteRecord.NomProspecto;
+        newQuote.Celular_prospecto__c = quoteRecord.TelProspecto;
+        newQuote.Email_prospecto__c = quoteRecord.EmailProspecto;
         // external id field
         newQuote.N_mero_de_cotizaci_n__c = quoteExternalId;
         newQuote.Pricebook2Id = this.standardPricebookId;
