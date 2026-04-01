@@ -103,6 +103,12 @@ public with sharing class ETC_SyncQuoteController {
             recordLinks.put('error', e.getMessage().split('first error: ')[1]);
             return recordLinks;
         }
+
+        // If Quote exists then remove
+        List<QuoteLineItem> existingQuoteItems = [SELECT Id FROM QuoteLineItem WHERE Quote.N_mero_de_cotizaci_n__c = :newQuoteData.data.MovID];
+        if (existingQuoteItems.size() > 0) {
+            delete existingQuoteItems;
+        }
         
         Quote newQuote = new Quote();
         try {
@@ -151,13 +157,7 @@ public with sharing class ETC_SyncQuoteController {
                 newQuoteItem.External_Id__c = newQuoteData.data.MovID + '_' + quoteItem.Renglon;
                 newQuoteLineitems.add(newQuoteItem);
             }
-            try {
-                System.debug(newQuoteLineItems);
-                delete newQuoteLineItems;
-            } catch (Exception e) {
-                System.debug('Error al eliminar las lineas de cotización');
-                System.debug(e.getMessage());
-            }
+            
             upsert newQuoteLineItems External_Id__c;
 
             Map<String, List<Object>> ordersToCreate = generateOrderRecordsWithItems(newQuoteData, newQuoteData.data.DestinoCta, newQuote, newOpp, standardPricebook, false);
@@ -166,15 +166,6 @@ public with sharing class ETC_SyncQuoteController {
             List<OrderItem> newOrderItems = (List<OrderItem>) ordersToCreate.get('orderItems');
 
             // System.debug(JSON.serializePretty(newOrders));
-
-            try {
-                delete newOrders;
-                upsert newChildrenOrders;
-                upsert newOrderItems;
-            } catch (Exception e) {
-                System.debug('Error al eliminar el y las lineas de pedido');
-                System.debug(e.getMessage());
-            }
 
             upsert newOrders Id_de_Movimiento__c;
             upsert newChildrenOrders Id_de_Movimiento__c;
