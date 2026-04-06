@@ -191,6 +191,8 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public Decimal Cantidad; // 600
         @AuraEnabled
+        public String DescArt; // 600
+        @AuraEnabled
         public Double Precio; // 43.59
         @AuraEnabled
         public Decimal DescuentoLinea; // 1
