@@ -3,11 +3,13 @@
     <!-- THIS XML CONTAIN QUOTE APEX CLASS TO DEPLOY IN PRODUCTION -->
     <!-- sf project deploy start -x .\manifest\PDEV_0_3_0.xml -o aei-production -l RunSpecifiedTests -\-tests ETC_TestQuotesModule -->
     <types>
+        <members>ETC_Utility</members>
         <members>ETC_TestQuotesModule</members>
         <members>ETC_ControllerGetQuotes</members>
         <members>ETC_QueueGetQuotes</members>
         <members>ETC_QuoteListResponseModel</members>
         <members>ETC_ScheduleGetQuote</members>
+        <members>ETC_NightScheduleGetQuote</members>
         <members>ETC_GetQuoteWs</members>
         <members>ETC_AeiQuoteModel</members>
         <members>ETC_SyncQuoteController</members>

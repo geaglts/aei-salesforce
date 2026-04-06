@@ -10,9 +10,10 @@ public with sharing class ETC_ScheduleGetQuote implements Schedulable {
 		}
 	}
 
-	public static void start() {
+	// ETC_ScheduleGetQuote.start('2026-04-06 6:00am');
+	public static void start(String dateToStart) {
 		if (!Test.isRunningTest()) {
-			System.schedule(ETC_ScheduleGetQuote.class.getName(), ETC_Utility.getCRONString(''), new ETC_ScheduleGetQuote());
+			System.schedule(ETC_ScheduleGetQuote.class.getName(), ETC_Utility.getSpecificTimeCron(dateToStart), new ETC_ScheduleGetQuote());
 		}
 	}
 }

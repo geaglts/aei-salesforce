@@ -59,8 +59,22 @@ public with sharing class ETC_TestQuotesModule {
     static void quoteSchedule() {
         String cron = ETC_Utility.getCRONString('');
         Test.startTest();
-        ETC_ScheduleGetQuote.start();
+        String dateToStart = Date.today().addDays(1).toString().split(' ')[0];
+        ETC_Utility.getSpecificTimeCron(dateToStart + ' 6:00am');
+        ETC_ScheduleGetQuote.start(dateToStart + ' 6:00am');
         ETC_ScheduleGetQuote scheduleProcess = new ETC_ScheduleGetQuote();
+        System.schedule('TEST QUOTES SCHEDULE PROCESS', cron, scheduleProcess);
+        Test.stopTest();
+    }
+    
+    @IsTest
+    static void quoteNightSchedule() {
+        String cron = ETC_Utility.getCRONString('');
+        Test.startTest();
+        String dateToStart = Date.today().addDays(1).toString().split(' ')[0];
+        ETC_Utility.getSpecificTimeCron(dateToStart + ' 6:00am');
+        ETC_NightScheduleGetQuote.start(dateToStart + ' 6:00am');
+        ETC_NightScheduleGetQuote scheduleProcess = new ETC_NightScheduleGetQuote();
         System.schedule('TEST QUOTES SCHEDULE PROCESS', cron, scheduleProcess);
         Test.stopTest();
     }

@@ -48,15 +48,15 @@ public with sharing class ETC_Utility {
 
         if (sendEmail) {
             if (errorCount > 0) {
-                Messaging.reserveSingleEmailCapacity(2);
-                Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-                String[] toAddresses = new List<String>{ 'miguel.angel@etcloudmx.com' };
-                mail.setToAddresses(toAddresses);
-                mail.setReplyTo('miguel.angel@etcloudmx.com');
-                mail.setSenderDisplayName('Salesforce Support');
-                mail.setSubject('Queue Errors');
-                mail.setPlainTextBody(body);
-                Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{ mail });
+                // Messaging.reserveSingleEmailCapacity(2);
+                // Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+                // String[] toAddresses = new List<String>{ 'miguel.angel@etcloudmx.com' };
+                // mail.setToAddresses(toAddresses);
+                // mail.setReplyTo('miguel.angel@etcloudmx.com');
+                // mail.setSenderDisplayName('Salesforce Support');
+                // mail.setSubject('Queue Errors');
+                // mail.setPlainTextBody(body);
+                // Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{ mail });
             }
         }
 
@@ -86,6 +86,38 @@ public with sharing class ETC_Utility {
 			nextRunTime.year();
 		return cronString;
 	}
+
+	public static String getSpecificTimeCron(String dateToStart) {
+    // formato de envió: 2026-03-18 6:30pm | yyyy-mm-dd h:mm[am|pm]
+    String[] dateParts = dateToStart.split(' ');
+    String hourToStartStr = '';
+    String minuteToStartStr = '';
+
+    Date today = Date.today();
+    Date nextRunTime = Date.valueOf(dateParts[0]);
+
+    TimeZone tz = TimeZone.getTimeZone('America/Mexico_City');
+    Integer offset = tz.getOffset(Datetime.now());
+    Datetime localTime = Datetime.now().addSeconds(offset / 1000);
+    Integer currentHour = localTime.hourGmt();
+    Integer currentMinute = localTime.minuteGmt();
+
+    String timeToStart = dateParts[1].replaceAll('(?i)pm|(?i)am', '');
+    Boolean isPm = dateParts[1].contains('pm');
+    String[] timeParts = timeToStart.split(':');
+    Integer hourToStart = Integer.valueOf(timeToStart.split(':')[0]);
+    Integer minuteToStart = Integer.valueOf(timeToStart.split(':')[1]);
+    if ((isPm ? hourToStart + 12 : hourToStart) + '' + minuteToStart < currentHour + '' + currentMinute && nextRunTime.day() <= today.day()) {
+      nextRunTime = nextRunTime.addDays(1);
+    }
+    hourToStartStr = String.valueOf(hourToStart + (isPm ? 12 : 0));
+    minuteToStartStr = String.valueOf(minuteToStart);
+
+    String cronString = '' + '0' + ' ' + minuteToStartStr + ' ' + hourToStartStr + ' ' + nextRunTime.day() + ' ' + nextRunTime.month() + ' ? ' + nextRunTime.year();
+    System.debug(cronString);
+
+    return cronString;
+  }
 
     public static void updateEnvironmentMetadata(String metadataName, String fieldApiName, String newValue) {
 		/**
