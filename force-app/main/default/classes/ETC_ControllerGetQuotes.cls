@@ -1,7 +1,7 @@
 /*
 ETC_ControllerGetQuotes controller = new ETC_ControllerGetQuotes();
 controller.sync(ETC_GetQuoteWs.getByPage(1));
-*/
+ */
 public virtual with sharing class ETC_ControllerGetQuotes {
     public List<Opportunity> quoteOpportunity;
     public List<Quote> quotes;
@@ -15,8 +15,8 @@ public virtual with sharing class ETC_ControllerGetQuotes {
     public static Map<String, String> currencyByTag = new Map<String, String>{
         'Dolares' => 'USD',
         'Euros' => 'EUR',
-        'Pesos' => 'MXN'};
-	public Map<String, String> usersByAgentCode;
+    'Pesos' => 'MXN'};
+    public Map<String, String> usersByAgentCode;
     
     public ETC_ControllerGetQuotes() {
         this.quoteOpportunity = new List<Opportunity>();
@@ -27,16 +27,16 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         this.orderItems = new List<OrderItem>();
         this.usersByAgentCode = new Map<String, String>();
     }
-
+    
     public void setGlobalParams(String pricebookId, Map<String, String> usersByAgentCode) {
         this.standardPricebookId = pricebookId;
         this.usersByAgentCode = usersByAgentCode;
     }
-
+    
     public void sync(ETC_QuoteListResponseModel serviceResponse) {
         buildSObject(serviceResponse.data);
     }
-
+    
     public void buildSObject(List<ETC_QuoteListResponseModel.Data> quotes) {
         for (ETC_QuoteListResponseModel.Data quoteRecord : quotes) {
             buildSObjectQuote(quoteRecord);
@@ -75,7 +75,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
             newQuote.LineasPerdidas__c = quoteRecord.etapaoportunidad[0].LineasPerdidas;
             newQuote.LineasRechazadas__c = quoteRecord.etapaoportunidad[0].LineasRechazadas;
         }
-
+        
         // TODO: Get current user to set in owner record
         String ownerId = '';
         if (usersByAgentCode.containsKey(quoteRecord.Agente)) {
@@ -83,26 +83,26 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         } else {
             ownerId = usersByAgentCode.get(DEFAULT_USER);
         }
-
+        
         newQuote.OwnerId = ownerId;
-
+        
         quotes.add(newQuote);
-
+        
         buildSObjectOpportunity(quoteRecord, quoteExternalId, ownerId);
-
+        
         for (ETC_QuoteListResponseModel.Ventadcta quoteItem: quoteRecord.ventadcta) {
             buildSObjectQuoteItem(quoteItem, quoteExternalId, currencyByTag.get(quoteRecord.Moneda));
         }
-
+        
         if (quoteRecord.DestinoCta.size() > 0) {
             // System.debug(quoteRecord.DestinoCta);
             buildSObjectOrder(quoteRecord, quoteRecord.DestinoCta, quoteExternalId, ownerId);
         }
     }
-
+    
     public void buildSObjectOpportunity(ETC_QuoteListResponseModel.Data quoteRecord, String quoteExternalId, String ownerId) {
         Opportunity newOpp = new Opportunity();
-
+        
         newOpp.Name = quoteExternalId;
         newOpp.OwnerId = ownerId;
         newOpp.Account = new Account(Cliente__c = quoteRecord.Cliente);
@@ -118,12 +118,12 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         
         quoteOpportunity.add(newOpp);
     }
-
-
+    
+    
     public void buildSObjectQuoteItem(ETC_QuoteListResponseModel.Ventadcta quoteItem, String quoteExternalId, String moneda) {
         Product2 productRef = new Product2(External_Id__c=quoteItem.Articulo);
         PricebookEntry pbEntryRef = new PricebookEntry(External_Id__c=moneda.toLowerCase() + '_' + quoteItem.Articulo);
-
+        
         QuoteLineItem newQuoteItem = new QuoteLineItem();
         newQuoteItem.Quote = new Quote(N_mero_de_cotizaci_n__c = quoteExternalId);
         if (String.isBlank(String.valueOf(quoteItem.Cantidad)) || quoteItem.Cantidad == 0) {
@@ -145,25 +145,34 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         newQuoteItem.Tho_Codigo_Fabricante__c = quoteItem.ThoCodigoFabricante;
         newQuoteItem.Impuesto1__c = String.valueOf(quoteItem.Impuesto1);
         newQuoteItem.Costo__c = String.valueOf(quoteItem.Costo);
+        if (String.isNotBlank(quoteItem.DescArt)) {
+            if (quoteItem.DescArt.length() > 255) {
+                newQuoteItem.Description = quoteItem.DescArt.substring(0, 255);
+                newQuoteItem.DescArt__c = quoteItem.DescArt;
+            } else {
+                newQuoteItem.Description = quoteItem.DescArt;
+                newQuoteItem.DescArt__c = quoteItem.DescArt;
+            }
+        }
         if (String.isNotBlank(quoteItem.FechaRequerida)) {
             newQuoteItem.Fecha_Requerida__c = Datetime.valueOf(quoteItem.FechaRequerida.replaceAll('T', ' '));
         }
         newQuoteItem.ContUso2__c = quoteItem.ContUso2;
-        newQuoteItem.ThoDescAmpliada__c = quoteItem.ThoDescAmpliada;                
+        newQuoteItem.ThoDescAmpliada__c = quoteItem.ThoDescAmpliada;
         // external id field
         newQuoteItem.External_Id__c = quoteExternalId + '_' + quoteItem.Renglon;
         
         quoteLineItems.add(newQuoteItem);
     }
-
+    
     
     public void buildSObjectOrder(ETC_QuoteListResponseModel.Data newQuoteData, ETC_QuoteListResponseModel.DestinoCta[] ordersToCreate, String quoteExternalId, String ownerId) {
-        Map<String, List<Object>> orderRecordsToCreate = generateOrderRecordsWithItems(newQuoteData, ordersToCreate, this.standardPricebookId, false, quoteExternalId, ownerId);        
-        this.orders.addAll((List<Order>) orderRecordsToCreate.get('orders'));        
-        this.childrenOrders.addAll((List<Order>) orderRecordsToCreate.get('childrenOrders'));        
+        Map<String, List<Object>> orderRecordsToCreate = generateOrderRecordsWithItems(newQuoteData, ordersToCreate, this.standardPricebookId, false, quoteExternalId, ownerId);
+        this.orders.addAll((List<Order>) orderRecordsToCreate.get('orders'));
+        this.childrenOrders.addAll((List<Order>) orderRecordsToCreate.get('childrenOrders'));
         this.orderItems.addAll((List<OrderItem>) orderRecordsToCreate.get('orderItems'));
     }
-
+    
     /*Order,OrderItem*/
     // Metodo para generar los pedidos de una cotizacion con base a un parametro de entrada
     // Parametro de entrada: Lista de pedidos a generar
@@ -196,7 +205,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
             }
             if (orderItem.FechaEmision != null) {
                 newOrderRecord.EffectiveDate = Date.valueOf(orderItem.FechaEmision);
-            }   
+            }
             newOrderRecord.Opportunity = new Opportunity(N_mero_de_cotizaci_n__c = quoteExternalId);
             newOrderRecord.Pricebook2Id = standardPricebook;
             if (ETC_SyncQuoteController.recordTypeForOrder.containsKey(orderItem.Mov.toLowerCase())) {
@@ -233,7 +242,7 @@ public virtual with sharing class ETC_ControllerGetQuotes {
                 }
                 newOrderLineitems.add(newOrderLine);
             }
-
+            
             if (orderItem.DestPedidoCte != null) {
                 Map<String, List<Object>> adjustmentOrders = generateOrderRecordsWithItems(newQuoteData, orderItem.DestPedidoCte, standardPricebook, true, quoteExternalId, ownerId);
                 List<Order> adjustedOrders = (List<Order>) adjustmentOrders.get('orders');
@@ -242,13 +251,13 @@ public virtual with sharing class ETC_ControllerGetQuotes {
                 newChildrenOrders.addAll(adjustedOrders);
                 newOrderLineItems.addAll(adjustedOrderItems);
             }
-
+            
         }
-
+        
         outputRecords.put('orders', newOrders);
         outputRecords.put('childrenOrders', newChildrenOrders);
         outputRecords.put('orderItems', newOrderLineItems);
-
+        
         return outputRecords;
     }
 }

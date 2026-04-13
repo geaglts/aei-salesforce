@@ -2,8 +2,8 @@ public with sharing class ETC_SyncQuoteController {
     public static Map<String, String> currencyByTag = new Map<String, String>{
         'Dolares' => 'USD',
         'Euros' => 'EUR',
-        'Pesos' => 'MXN'};
-
+    'Pesos' => 'MXN'};
+    
     public static Map<String, Id> recordTypeForOrder = new Map<String, Id>{
         'cotizacion perdida' => Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Cotizaci_n_perdida').getRecordTypeId(),
         'ajuste pedido' => Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Ajuste_de_pedido').getRecordTypeId(),
@@ -12,7 +12,7 @@ public with sharing class ETC_SyncQuoteController {
         'venta perdida' => Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Venta_perdida').getRecordTypeId(),
         'venta rechazada' => Schema.SObjectType.Order.getRecordTypeInfosByDeveloperName().get('Venta_rechazada').getRecordTypeId()
     };
-
+    
     public static String DEFAULT_OWNER;
     
     @AuraEnabled(cacheable=false)
@@ -24,7 +24,7 @@ public with sharing class ETC_SyncQuoteController {
             return new Account();
         }
     }
-
+    
     @AuraEnabled(cacheable=false)
     public static Opportunity getOpportunity(String identificationCode) {
         if (identificationCode == null) {
@@ -37,7 +37,7 @@ public with sharing class ETC_SyncQuoteController {
             return new Opportunity();
         }
     }
-
+    
     @AuraEnabled(cacheable=false)
     public static Quote findQuoteByExternalId(String externalId) {
         List<Quote> quotes = [SELECT Id, Name, N_mero_de_cotizaci_n__c, OpportunityId FROM Quote WHERE N_mero_de_cotizaci_n__c = :externalId];
@@ -47,7 +47,7 @@ public with sharing class ETC_SyncQuoteController {
             return null;
         }
     }
-
+    
     @AuraEnabled(cacheable=false)
     public static String generateRecordLink(String recordId) {
         if (recordId == null) {
@@ -56,19 +56,19 @@ public with sharing class ETC_SyncQuoteController {
         String recordUrl = URL.getOrgDomainUrl().toExternalForm() + '/' + recordId;
         return recordUrl;
     }
-
+    
     @AuraEnabled(cacheable=false)
     public static Map<String, String> saveQuoteRecord(String rawNewQuoteData) {
         Map<String, String> ownersByAgent = ETC_Utility.getUserIdByAgentCode();
         String standardPricebook = Test.isRunningTest() ? Test.getStandardPricebookId() : [SELECT Id FROM Pricebook2 WHERE IsStandard = true LIMIT 1].Id;
         Map<String, String> recordLinks = new Map<String, String>();
         ETC_AeiQuoteModel newQuoteData = ETC_AeiQuoteModel.parse(rawNewQuoteData);
-
+        
         // if (newQuoteData.data.sfOppId == null) {
-        //     recordLinks.put('error', 'Esta cotización no puede ser creada debido a que no existe una oportunidad, por favor, genere la oportunidad y asigne el código de la cotización correspondiente.');
-        //     return recordLinks;
+            //     recordLinks.put('error', 'Esta cotización no puede ser creada debido a que no existe una oportunidad, por favor, genere la oportunidad y asigne el código de la cotización correspondiente.');
+            //     return recordLinks;
         // }
-
+        
         Opportunity newOpp = new Opportunity();
         if (ownersByAgent.containsKey(newQuoteData.data.Agente)) {
             ETC_SyncQuoteController.DEFAULT_OWNER = ownersByAgent.get(newQuoteData.data.Agente);
@@ -103,7 +103,7 @@ public with sharing class ETC_SyncQuoteController {
             recordLinks.put('error', e.getMessage().split('first error: ')[1]);
             return recordLinks;
         }
-
+        
         // If Quote exists then remove
         List<QuoteLineItem> existingQuoteItems = [SELECT Id FROM QuoteLineItem WHERE Quote.N_mero_de_cotizaci_n__c = :newQuoteData.data.MovID];
         if (existingQuoteItems.size() > 0) {
@@ -127,10 +127,10 @@ public with sharing class ETC_SyncQuoteController {
             newQuote.OpportunityId = newOpp.Id;
             newQuote.debug__c = rawNewQuoteData;
             upsert newQuote N_mero_de_cotizaci_n__c;
-
+            
             // newOpp.SyncedQuoteId = newQuote.Id;
             // update newOpp;
-
+            
             recordLinks.put('quoteUrl', ETC_SyncQuoteController.generateRecordLink(newQuote.Id));
             List<QuoteLineItem> newQuoteLineItems = new List<QuoteLineItem>();
             for (ETC_AeiQuoteModel.VentaDCta quoteItem: newQuoteData.data.VentaDCta) {
@@ -139,11 +139,20 @@ public with sharing class ETC_SyncQuoteController {
                 QuoteLineItem newQuoteItem = new QuoteLineItem();
                 newQuoteItem.QuoteId = newQuote.Id;
                 newQuoteItem.Quantity = quoteItem.Cantidad;
+                if (String.isNotBlank(quoteItem.DescArt)) {
+                    if (quoteItem.DescArt.length() > 255) {
+                        newQuoteItem.Description = quoteItem.DescArt.substring(0, 255);
+                        newQuoteItem.DescArt__c = quoteItem.DescArt;
+                    } else {
+                        newQuoteItem.Description = quoteItem.DescArt;
+                        newQuoteItem.DescArt__c = quoteItem.DescArt;
+                    }
+                }
                 newQuoteItem.UnitPrice = quoteItem.Precio;
                 newQuoteItem.Discount = quoteItem.DescuentoLinea;
                 newQuoteItem.Product2 = productRef;
                 newQuoteItem.PricebookEntry = pbEntryRef;
-
+                
                 newQuoteItem.Renglon_Tipo__c = quoteItem.RenglonTipo;
                 newQuoteItem.Tho_Codigo_Fabricante__c = quoteItem.ThoCodigoFabricante;
                 newQuoteItem.Impuesto1__c = String.valueOf(quoteItem.Impuesto1);
@@ -159,36 +168,36 @@ public with sharing class ETC_SyncQuoteController {
             }
             
             upsert newQuoteLineItems External_Id__c;
-
+            
             Map<String, List<Object>> ordersToCreate = generateOrderRecordsWithItems(newQuoteData, newQuoteData.data.DestinoCta, newQuote, newOpp, standardPricebook, false);
             List<Order> newOrders = (List<Order>) ordersToCreate.get('orders');
             List<Order> newChildrenOrders = (List<Order>) ordersToCreate.get('chidlrenOrders');
             List<OrderItem> newOrderItems = (List<OrderItem>) ordersToCreate.get('orderItems');
-
+            
             // System.debug(JSON.serializePretty(newOrders));
-
+            
             upsert newOrders Id_de_Movimiento__c;
             upsert newChildrenOrders Id_de_Movimiento__c;
             upsert newOrderItems External_Id__c;
-
-			// Database.UpsertResult[] orderResults = Database.upsert(newOrders, Order.Fields.Id_de_Movimiento__c, false);
-			// Database.UpsertResult[] childrenOrderResults = Database.upsert(newChildrenOrders, Order.Fields.Id_de_Movimiento__c, false);
-			// Database.UpsertResult[] orderItemResults = Database.upsert(newOrderItems, OrderItem.Fields.External_Id__c, false);
-
-			// List<Integer> upOrderResults = ETC_Utility.showQueueResult(orderResults, 'Pedidos', 0 - 1, false);
-			// System.debug('Se procesaron: ' + upOrderResults[0] + ' Registros exitosos. Pedidos');
-			// System.debug('Se procesaron: ' + upOrderResults[1] + ' Registros con errores. Pedidos');
-			
+            
+            // Database.UpsertResult[] orderResults = Database.upsert(newOrders, Order.Fields.Id_de_Movimiento__c, false);
+            // Database.UpsertResult[] childrenOrderResults = Database.upsert(newChildrenOrders, Order.Fields.Id_de_Movimiento__c, false);
+            // Database.UpsertResult[] orderItemResults = Database.upsert(newOrderItems, OrderItem.Fields.External_Id__c, false);
+            
+            // List<Integer> upOrderResults = ETC_Utility.showQueueResult(orderResults, 'Pedidos', 0 - 1, false);
+            // System.debug('Se procesaron: ' + upOrderResults[0] + ' Registros exitosos. Pedidos');
+            // System.debug('Se procesaron: ' + upOrderResults[1] + ' Registros con errores. Pedidos');
+            
             // List<Integer> upChildrenOrderResults = ETC_Utility.showQueueResult(childrenOrderResults, 'Pedidos Hijos', 0 - 1, false);
-			// System.debug('Se procesaron: ' + upChildrenOrderResults[0] + ' Registros exitosos. Pedidos Hijos');
-			// System.debug('Se procesaron: ' + upChildrenOrderResults[1] + ' Registros con errores. Pedidos Hijos');
-
-			// List<Integer> upOrderItemResults = ETC_Utility.showQueueResult(orderItemResults, 'Productos de pedido', 0 - 1, false);
-			// System.debug('Se procesaron: ' + upOrderItemResults[0] + ' Registros exitosos. Productos de pedido');
-			// System.debug('Se procesaron: ' + upOrderItemResults[1] + ' Registros con errores. Productos de pedido');
-
+            // System.debug('Se procesaron: ' + upChildrenOrderResults[0] + ' Registros exitosos. Pedidos Hijos');
+            // System.debug('Se procesaron: ' + upChildrenOrderResults[1] + ' Registros con errores. Pedidos Hijos');
+            
+            // List<Integer> upOrderItemResults = ETC_Utility.showQueueResult(orderItemResults, 'Productos de pedido', 0 - 1, false);
+            // System.debug('Se procesaron: ' + upOrderItemResults[0] + ' Registros exitosos. Productos de pedido');
+            // System.debug('Se procesaron: ' + upOrderItemResults[1] + ' Registros con errores. Productos de pedido');
+            
             newOrders.addAll(newChildrenOrders);
-
+            
             recordLinks.put('createdOrders', JSON.serialize(newOrders));
         } catch (Exception e) {
             System.debug('New Quote Exception');
@@ -196,12 +205,12 @@ public with sharing class ETC_SyncQuoteController {
             recordLinks.put('error', e.getMessage().split('first error: ')[1]);
             return recordLinks;
         }
-
+        
         System.debug(recordLinks);
-
+        
         return recordLinks;
     }
-
+    
     // Metodo para generar los pedidos de una cotizacion con base a un parametro de entrada
     // Parametro de entrada: Lista de pedidos a generar
     public static Map<String, List<Object>> generateOrderRecordsWithItems(ETC_AeiQuoteModel newQuoteData, ETC_AeiQuoteModel.DestinoCta[] ordersToCreate, Quote newQuote, Opportunity newOpp, String standardPricebook, Boolean isAdjustment) {
@@ -233,7 +242,7 @@ public with sharing class ETC_SyncQuoteController {
             }
             if (orderItem.FechaEmision != null) {
                 newOrderRecord.EffectiveDate = Date.valueOf(orderItem.FechaEmision);
-            }   
+            }
             newOrderRecord.OpportunityId = newOpp.id;
             newOrderRecord.Pricebook2Id = standardPricebook;
             if (recordTypeForOrder.containsKey(orderItem.Mov.toLowerCase())) {
@@ -262,7 +271,7 @@ public with sharing class ETC_SyncQuoteController {
                 newOrderLine.Descuento__c = orderLine.DescuentoLinea;
                 newOrderLine.Product2 = productRef;
                 newOrderLine.PricebookEntry = pbEntryRef;
-
+                
                 if (String.isNotBlank(String.valueOf(orderLine.AplicaRenglon))) {
                     QuoteLineItem quoteLineItemRef = new QuoteLineItem(External_Id__c=newQuote.N_mero_de_cotizaci_n__c + '_' + orderLine.AplicaRenglon);
                     newOrderLine.QuoteLineItem = quoteLineItemRef;
@@ -272,7 +281,7 @@ public with sharing class ETC_SyncQuoteController {
                 }
                 newOrderLineitems.add(newOrderLine);
             }
-
+            
             if (orderItem.DestPedidoCte != null) {
                 Map<String, List<Object>> adjustmentOrders = generateOrderRecordsWithItems(newQuoteData, orderItem.DestPedidoCte, newQuote, newOpp, standardPricebook, true);
                 List<Order> adjustedOrders = (List<Order>) adjustmentOrders.get('orders');
@@ -281,13 +290,13 @@ public with sharing class ETC_SyncQuoteController {
                 newChildrenOrders.addAll(adjustedOrders);
                 newOrderLineItems.addAll(adjustedOrderItems);
             }
-
+            
         }
-
+        
         outputRecords.put('orders', newOrders);
         outputRecords.put('chidlrenOrders', newChildrenOrders);
         outputRecords.put('orderItems', newOrderLineItems);
-
+        
         return outputRecords;
     }
 }
