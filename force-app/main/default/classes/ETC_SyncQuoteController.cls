@@ -85,6 +85,12 @@ public with sharing class ETC_SyncQuoteController {
                 newOpp.Id = newQuoteData.data.sfOppId;
                 newOpp.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
             }
+            if (!newQuoteData.data.FamiliaCot.isEmpty()) {
+                newOpp.Familias_de_producto__c = newQuoteData.data.FamiliaCot[0].Familia.replaceAll(' ', '');
+            }
+            if (!newQuoteData.data.MotivosCot.isEmpty()) {
+                newOpp.Motivos_de_cotizaci_n__c = newQuoteData.data.MotivosCot[0].MotivoCierre.replaceAll(' ', '');
+            }
             newOpp.OwnerId = ETC_SyncQuoteController.DEFAULT_OWNER;
             newOpp.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;
             if (newQuoteData.data.EtapaOportunidad.size() > 0) {

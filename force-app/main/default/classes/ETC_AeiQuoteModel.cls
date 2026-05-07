@@ -1,7 +1,7 @@
 public class ETC_AeiQuoteModel {
     @AuraEnabled
     public Data data;
-
+    
     public class Data {
         @AuraEnabled
         public Decimal ID; // 993
@@ -66,7 +66,7 @@ public class ETC_AeiQuoteModel {
         public List<FamiliaCotDto> FamiliaCot;
         public List<MotivoCotDto> MotivosCot;
     }
-
+    
     public class SucursalCta {
         @AuraEnabled
         public Decimal Sucursal; // 2
@@ -91,7 +91,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String RFC; // "AEI861027P26"
     }
-
+    
     public class ClienteCta {
         @AuraEnabled
         public String Nombre; // "CONSTRUCTORA SUBACUATICA DIAVAZ"
@@ -114,7 +114,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String eMail1; // "facturacion_electronica@diavaz.com"
     }
-
+    
     public class DestinoCta {
         @AuraEnabled
         public Decimal ID; // 995
@@ -145,7 +145,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public List<DetalleDtoCta> DestDetPedidoCte;
     }
-
+    
     public class DetalleDtoCta {
         @AuraEnabled
         public String OrigenTipo; // "Ajuste"
@@ -176,7 +176,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public Double Importe; // 26154
     }
-
+    
     public class VentaDCta {
         @AuraEnabled
         public Decimal Renglon; // 2048
@@ -209,7 +209,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public Boolean ThoDescAmpliada; // true
     }
-
+    
     public class EtapaOportunidadDto {
         @AuraEnabled
         public String Estatus;
@@ -226,7 +226,7 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String EtapaOportunidad;
     }
-
+    
     public class FamiliaCotDto {
         @AuraEnabled
         public String Mov;
@@ -235,20 +235,16 @@ public class ETC_AeiQuoteModel {
         @AuraEnabled
         public String Familia;
     }
-
+    
     public class MotivoCotDto {
         @AuraEnabled
-        public String Movl; //"Cotizacion"
+        public String Mov; //"Cotizacion"
         @AuraEnabled
-        public String MovIDl; //"MID40601"
+        public String MovID; //"MID40601"
         @AuraEnabled
-        public String DestMovCotl; //"Pedido"
-        @AuraEnabled
-        public String DestMovIDCotl; //"MID16776"
-        @AuraEnabled
-        public String MotivoCierrel; //"Compra"
+        public String MotivoCierre; //"Pedido"
     }
-
+    
     public static ETC_AeiQuoteModel parse(String jsonString) {
         return (ETC_AeiQuoteModel) JSON.deserialize(jsonString, ETC_AeiQuoteModel.class);
     }
