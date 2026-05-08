@@ -3,19 +3,19 @@ public with sharing class ETC_TestQuotesModule {
     @TestSetup
     static void makeData(){
         update new Pricebook2(Id = Test.getStandardPricebookId());
-
-        List<String> clientsToCreate = new List<String> {'test', '289'};
+        
+        List<String> clientsToCreate = new List<String> {'test', '803'};
         Account[] accounts = new List<Account>();
-
+        
         for (String clientToCreate : clientsToCreate) {
             Account newAccount = new Account();
             newAccount.Name = 'etc' + clientToCreate;
             newAccount.Cliente__c = clientToCreate;
             accounts.add(newAccount);
         }
-
+        
         insert accounts;
-
+        
         Opportunity newOpportunity = new Opportunity();
         newOpportunity.Name = 'opp test';
         newOpportunity.CloseDate = Date.today();
@@ -23,7 +23,7 @@ public with sharing class ETC_TestQuotesModule {
         newOpportunity.N_mero_de_cotizaci_n__c = 'test';
         newOpportunity.AccountId = accounts[0].Id;
         insert newOpportunity;
-
+        
         Opportunity newOpportunityWithoutOpportunity = new Opportunity();
         newOpportunityWithoutOpportunity.Name = 'opp test';
         newOpportunityWithoutOpportunity.CloseDate = Date.today();
@@ -31,15 +31,15 @@ public with sharing class ETC_TestQuotesModule {
         newOpportunityWithoutOpportunity.N_mero_de_cotizaci_n__c = 'CUN12296';
         newOpportunityWithoutOpportunity.AccountId = accounts[0].Id;
         insert newOpportunityWithoutOpportunity;
-
+        
         Quote newQuote = new Quote();
         newQuote.Name = 'quote test';
         newQuote.OpportunityId = newOpportunity.Id;
         newQuote.Pricebook2Id = Test.getStandardPricebookId();
         newQuote.N_mero_de_cotizaci_n__c = 'test';
         insert newQuote;
-
-        List<String> productsToCreate = new List<String>{'IL-CLI0-0404', 'EL-LEO0-GEN'};
+        
+        List<String> productsToCreate = new List<String>{'IL-CLI0-0404', 'EL-LEO0-GEN', 'EL-GEN0-0001'};
         for (String productToCreate : productsToCreate) {
             Product2 newProduct = new Product2();
             newProduct.Name = productToCreate;
@@ -48,10 +48,10 @@ public with sharing class ETC_TestQuotesModule {
             newProduct.IsActive = true;
             insert newProduct;
         }
-
+        
         Sucursal__c newPoint = new Sucursal__c();
         newPoint.Name = 'test';
-        newPoint.External_Id__c = '0';
+        newPoint.External_Id__c = '2';
         insert newPoint;
     }
     
@@ -78,7 +78,7 @@ public with sharing class ETC_TestQuotesModule {
         System.schedule('TEST QUOTES SCHEDULE PROCESS', cron, scheduleProcess);
         Test.stopTest();
     }
-
+    
     @IsTest
     static void syncQuoteByOppInvocableMethod(){
         Account acc = [SELECT Id FROM Account LIMIT 1];
@@ -92,18 +92,18 @@ public with sharing class ETC_TestQuotesModule {
         ETC_GetQuoteWs.syncQuoteFromWs(null);
         Test.stopTest();
     }
-
+    
     // Sync Quote Controller Test
     @IsTest
-    static void getAccount() {        
+    static void getAccount() {
         Test.startTest();
         ETC_SyncQuoteController.getAccount('test');
         ETC_SyncQuoteController.getAccount('test_fail');
         Test.stopTest();
     }
-
+    
     @IsTest
-    static void getOpportunity() {        
+    static void getOpportunity() {
         Test.startTest();
         ETC_SyncQuoteController.getOpportunity(null);
         ETC_SyncQuoteController.getOpportunity('test');
@@ -112,13 +112,13 @@ public with sharing class ETC_TestQuotesModule {
     }
     
     @IsTest
-    static void getQuote() {        
+    static void getQuote() {
         Test.startTest();
         ETC_SyncQuoteController.findQuoteByExternalId('test');
         ETC_SyncQuoteController.findQuoteByExternalId('test_fail');
         Test.stopTest();
     }
-
+    
     @IsTest
     static void generateRecordLink(){
         Account acc = [SELECT Id FROM Account LIMIT 1];
@@ -127,7 +127,7 @@ public with sharing class ETC_TestQuotesModule {
         ETC_SyncQuoteController.generateRecordLink(acc.Id);
         Test.stopTest();
     }
-
+    
     @IsTest
     static void saveQuoteRecord() {
         Test.startTest();

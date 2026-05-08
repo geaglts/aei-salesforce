@@ -112,6 +112,18 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         if (quoteRecord.etapaoportunidad != null && quoteRecord.etapaoportunidad.size() > 0) {
             newOpp.StageName = quoteRecord.etapaoportunidad[0].EtapaOportunidad;
         }
+        
+        System.debug('SI');
+        System.debug(quoteRecord.FamiliaCot);
+        if (!quoteRecord.FamiliaCot.isEmpty()) {
+            newOpp.Familias_de_producto__c = quoteRecord.FamiliaCot[0].Familia.replaceAll(' ', '');
+        }
+        System.debug('SI');
+        System.debug(quoteRecord.FamiliaCot);
+        if (!quoteRecord.MotivosCot.isEmpty()) {
+            newOpp.Motivos_de_cotizaci_n__c = quoteRecord.MotivosCot[0].MotivoCierre.replaceAll(' ', '');
+        }
+        
         newOpp.CurrencyIsoCode = currencyByTag.get(quoteRecord.Moneda);
         // external id field
         newOpp.N_mero_de_cotizaci_n__c = quoteExternalId;

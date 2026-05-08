@@ -36,6 +36,6 @@
     </values>
     <values>
         <field>timer__c</field>
-        <value xsi:type="xsd:double">30.0</value>
+        <value xsi:type="xsd:double">15.0</value>
     </values>
 </CustomMetadata>

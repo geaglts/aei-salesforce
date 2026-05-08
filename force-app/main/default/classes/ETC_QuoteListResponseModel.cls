@@ -1,12 +1,12 @@
 public class ETC_QuoteListResponseModel {
     public Meta meta;
     public List<Data> data;
-
+    
     public class Meta {
         public Decimal page; // 1
         public Decimal limit_cst; // 100
     }
-
+    
     public class Data {
         public Decimal ID; // 268147
         public Decimal Sucursal; // 2
@@ -39,7 +39,7 @@ public class ETC_QuoteListResponseModel {
         public List<FamiliaCotDto> FamiliaCot;
         public List<MotivoCotDto> MotivosCot;
     }
-
+    
     public class DestinoCta {
         @AuraEnabled
         public Decimal ID; // 995
@@ -70,7 +70,7 @@ public class ETC_QuoteListResponseModel {
         @AuraEnabled
         public List<DetalleDtoCta> DestDetPedidoCte;
     }
-
+    
     public class DetalleDtoCta {
         @AuraEnabled
         public String OrigenTipo; // "Ajuste"
@@ -100,7 +100,7 @@ public class ETC_QuoteListResponseModel {
         @AuraEnabled
         public Double Importe; // 26154
     }
-
+    
     public class Sucursalcta {
         public Decimal Sucursal; // 2
         public String Nombre; // "CARMEN"
@@ -114,7 +114,7 @@ public class ETC_QuoteListResponseModel {
         public String CodigoPostal; // "24140"
         public String RFC; // "AEI861027P26"
     }
-
+    
     public class Clientecta {
         public String Nombre; // "ON ENERGY SOLUTIONS"
         public String Direccion; // ""
@@ -126,7 +126,7 @@ public class ETC_QuoteListResponseModel {
         public String CodigoPostal; // "44680"
         public String RFC; // "OES200914RX4"
     }
-
+    
     public class Ventadcta {
         public Decimal Renglon; // 2048
         public String RenglonTipo; // "N"
@@ -144,7 +144,7 @@ public class ETC_QuoteListResponseModel {
         public String FechaRequerida; // "2026-03-31T00:00:00"
         public Boolean ThoDescAmpliada; // true
     }
-
+    
     public class Etapaoportunidad {
         public String Estatus; // "SINAFECTAR"
         public Decimal TotalLineas; // 2
@@ -154,7 +154,7 @@ public class ETC_QuoteListResponseModel {
         public Decimal LineasRechazadas; // 0
         public String EtapaOportunidad; // "Propuesta Financiera"
     }
-
+    
     public class FamiliaCotDto {
         @AuraEnabled
         public String Mov;
@@ -163,20 +163,16 @@ public class ETC_QuoteListResponseModel {
         @AuraEnabled
         public String Familia;
     }
-
+    
     public class MotivoCotDto {
         @AuraEnabled
-        public String Movl; //"Cotizacion"
+        public String Mov; //"Cotizacion"
         @AuraEnabled
-        public String MovIDl; //"MID40601"
+        public String MovID; //"MID40601"
         @AuraEnabled
-        public String DestMovCotl; //"Pedido"
-        @AuraEnabled
-        public String DestMovIDCotl; //"MID16776"
-        @AuraEnabled
-        public String MotivoCierrel; //"Compra"
+        public String MotivoCierre; //"Pedido"
     }
-
+    
     public static ETC_QuoteListResponseModel parse(String jsonString) {
         jsonString = jsonString.replace('"limit"', '"limit_cst"');
         system.debug('===========+++++++++++++++++++++++++++++===========');
