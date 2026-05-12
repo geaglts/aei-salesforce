@@ -116,12 +116,12 @@ public virtual with sharing class ETC_ControllerGetQuotes {
         System.debug('SI');
         System.debug(quoteRecord.FamiliaCot);
         if (!quoteRecord.FamiliaCot.isEmpty()) {
-            newOpp.Familias_de_producto__c = quoteRecord.FamiliaCot[0].Familia.replaceAll(' ', '');
+            newOpp.Familias_de_producto__c = quoteRecord.FamiliaCot[0].Familia.trim();
         }
         System.debug('SI');
         System.debug(quoteRecord.FamiliaCot);
         if (!quoteRecord.MotivosCot.isEmpty()) {
-            newOpp.Motivos_de_cotizaci_n__c = quoteRecord.MotivosCot[0].MotivoCierre.replaceAll(' ', '');
+            newOpp.Motivos_de_cotizaci_n__c = quoteRecord.MotivosCot[0].MotivoCierre.trim();
         }
         
         newOpp.CurrencyIsoCode = currencyByTag.get(quoteRecord.Moneda);

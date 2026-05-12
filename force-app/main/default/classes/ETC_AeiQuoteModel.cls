@@ -63,7 +63,9 @@ public class ETC_AeiQuoteModel {
         public List<VentaDCta> VentaDCta;
         @AuraEnabled
         public List<EtapaOportunidadDto> EtapaOportunidad;
+        @AuraEnabled
         public List<FamiliaCotDto> FamiliaCot;
+        @AuraEnabled
         public List<MotivoCotDto> MotivosCot;
     }
     

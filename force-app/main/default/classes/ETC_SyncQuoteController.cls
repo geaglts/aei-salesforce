@@ -59,6 +59,7 @@ public with sharing class ETC_SyncQuoteController {
     
     @AuraEnabled(cacheable=false)
     public static Map<String, String> saveQuoteRecord(String rawNewQuoteData) {
+        System.debug(rawNewQuoteData);
         Map<String, String> ownersByAgent = ETC_Utility.getUserIdByAgentCode();
         String standardPricebook = Test.isRunningTest() ? Test.getStandardPricebookId() : [SELECT Id FROM Pricebook2 WHERE IsStandard = true LIMIT 1].Id;
         Map<String, String> recordLinks = new Map<String, String>();
@@ -86,10 +87,11 @@ public with sharing class ETC_SyncQuoteController {
                 newOpp.CurrencyIsoCode = currencyByTag.get(newQuoteData.data.Moneda);
             }
             if (!newQuoteData.data.FamiliaCot.isEmpty()) {
-                newOpp.Familias_de_producto__c = newQuoteData.data.FamiliaCot[0].Familia.replaceAll(' ', '');
+                newOpp.Familias_de_producto__c = newQuoteData.data.FamiliaCot[0].Familia.trim();
             }
             if (!newQuoteData.data.MotivosCot.isEmpty()) {
-                newOpp.Motivos_de_cotizaci_n__c = newQuoteData.data.MotivosCot[0].MotivoCierre.replaceAll(' ', '');
+                System.debug(newQuoteData.data.MotivosCot[0].MotivoCierre.trim());
+                newOpp.Motivos_de_cotizaci_n__c = newQuoteData.data.MotivosCot[0].MotivoCierre.trim();
             }
             newOpp.OwnerId = ETC_SyncQuoteController.DEFAULT_OWNER;
             newOpp.N_mero_de_cotizaci_n__c = newQuoteData.data.MovID;
